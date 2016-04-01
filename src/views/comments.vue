@@ -1,0 +1,51 @@
+<template>
+  <navigation-bar :go-back="buildLink">
+    <div slot="middle_content">
+      顾客评论
+    </div>
+  </navigation-bar>
+  <div class="weui_panel">
+    <div class="weui_panel_hd">文字列表附来源</div>
+    <div class="weui_panel_bd">
+      <div class="weui_media_box weui_media_text" v-for="comment in comments">
+        <h4 class="weui_media_title">{{comment.user.nickname}}</h4>
+        <p class="weui_media_desc">{{comment.content}}</p>
+        <ul class="weui_media_info">
+          <li class="weui_media_info_meta">文字来源</li>
+          <li class="weui_media_info_meta">时间</li>
+          <li class="weui_media_info_meta weui_media_info_meta_extra">其它信息</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  props: ['shop_id'],
+  data () {
+    return {
+      shop: {},
+      comments: []
+    }
+  },
+  route: {
+    data (transition) {
+      var params = this.$route.params
+      this.$http.get('http://jiancan.me/api/u1/shops/one.json', { shop_id: params.shop_id }).then(function (response) {
+        this.$set('shop', response.data)
+        this.$set('comments', this.shop.comments)
+      }, function (response) {
+        this.$dispatch('response-msg', response)
+      })
+    }
+  },
+  computed: {
+    buildLink () {
+      return '/shops/' + this.shop.id
+    }
+  },
+  components: {
+    'NavigationBar': require('../components/navigation-bar.vue')
+  }
+}
+</script>
