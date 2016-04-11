@@ -42,6 +42,12 @@ export default function (router) {
         require(['./views/comments.vue'], resolve)
       }
     },
+    '/bookings': {
+      name: 'bookings',
+      component: function (resolve) {
+        require(['./views/bookings.vue'], resolve)
+      }
+    },
     '/booking/:room_id': {
       name: 'booking',
       component: function (resolve) {
@@ -100,6 +106,12 @@ export default function (router) {
       name: 'authorize',
       component: function (resolve) {
         require(['./views/authorize.vue'], resolve)
+      }
+    },
+    '/what': {
+      name: 'what',
+      component: function (resolve) {
+        require(['./views/what.vue'], resolve)
       }
     }
   })

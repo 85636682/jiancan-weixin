@@ -7,9 +7,6 @@
       <a @click="login" v-show="!logged" class="weui_btn weui_btn_mini weui_btn_warn" style="margin-top:8px;">登录</a>
     </div>
   </navigation-bar>
-  <group title="是否外卖">
-    <radio :options="howToEatList" :value.sync="order.howToEat"></radio>
-  </group>
   <group title="支付方式">
     <radio :options="payMethodList" :value.sync="order.payMethod"></radio>
   </group>
@@ -18,6 +15,7 @@
     <x-input :value.sync="order.remarks" title="订单备注" placeholder="口味、偏好等其他要求"></x-input>
   </group>
   <group>
+    <x-input :value.sync="order.mobile" title="送餐电话" placeholder="送餐电话"></x-input>
     <textarea :value.sync="order.address" :max=200 placeholder="请填写详细地址"></textarea>
   </group>
   <group title="购买商品">
@@ -66,14 +64,13 @@
     data () {
       return {
         payMethodList: [ '在线支付', '货到付款' ],
-        howToEatList: [ '外卖', '到店' ],
         shopId: 0,
         selectedProducts: [],
         order: {
-          howToEat: '外卖',
           payMethod: '在线支付',
           mealTime: '',
           remarks: '',
+          mobile: '',
           address: ''
         },
         user: {},
@@ -92,9 +89,8 @@
           this.logged = true
           this.confirmLog = false
           this.$http.get('http://jiancan.me/api/u1/users/current.json', { access_token: access_token }).then(function (response) {
-            transition.next({
-              user: response.data
-            })
+            this.$set('user', response.data)
+            this.order.mobile = this.user.mobile
           }, function (response) {
             this.$dispatch('response-msg', response)
           })
@@ -167,10 +163,11 @@
         var formData = new FormData()
         formData.append('access_token', localStorage.jc_user_access_token)
         formData.append('order[shop_id]', this.$route.params.shop_id)
-        formData.append('order[takeout]', this.order.howToEat === '外卖' ? 'true' : 'false')
+        formData.append('order[takeout]', 'true')
         formData.append('order[pay_method]', this.order.payMethod === '在线支付' ? 'online' : 'offline')
         formData.append('order[meal_time]', this.order.mealTime)
         formData.append('order[remarks]', this.order.remarks)
+        formData.append('order[mobile]', this.order.mobile)
         formData.append('order[address]', this.order.address)
         formData.append('products_quantity', this.formatProducts())
 

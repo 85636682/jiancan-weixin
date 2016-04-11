@@ -39,7 +39,7 @@
   <div class="weui_panel weui_panel_access">
     <div class="weui_panel_hd">{{selectedCategoryName}}</div>
     <div class="weui_panel_bd shop_list_bd">
-      <a v-for="shop in shops" v-link="'shops/' + shop.id" class="weui_media_box weui_media_appmsg">
+      <a v-for="shop in shops" v-link="'/shops/' + shop.id" class="weui_media_box weui_media_appmsg">
         <div class="weui_media_hd">
           <img class="weui_media_appmsg_thumb" v-bind:src="shop.avatar" alt="">
         </div>
