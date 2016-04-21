@@ -43,7 +43,7 @@
           request_url = 'profile'
         }
         if (request_url === 'check') {
-          self.$route.router.go({ name: request_url, params: { shop_id: self.$route.query.shop_id } })
+          self.$route.router.go({ name: request_url, query: { shop_id: self.$route.query.shop_id, express: this.$route.query.express } })
         } else {
           self.$route.router.go({ name: request_url })
         }

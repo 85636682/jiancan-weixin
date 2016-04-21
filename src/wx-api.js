@@ -4,6 +4,7 @@ export default {
       let data = res.data
 
       window.wx.config({
+        debug: true,
         appId: data.appId,
         timestamp: data.timestamp,
         nonceStr: data.nonceStr,

@@ -1,5 +1,5 @@
 .page, body {
-    background-color: #fbf9fe
+    background-color: #fbf9fe;
 }
 
 .page {
@@ -229,4 +229,21 @@ i.icon-profile-coins, i.icon-service-phone {
   line-height: 80px;
   text-align: right;
   padding-right: 10px;
+}
+
+.signin_line {
+  height: 1px;
+  border-top: 1px solid #ddd;
+  text-align: center;
+}
+
+.signin_line span {
+  position: relative;
+  top: -13px;
+  background: #fbf9fe;
+  padding: 0 20px;
+}
+
+.oauth_logos .weui_grids a {
+  border: 0px;
 }

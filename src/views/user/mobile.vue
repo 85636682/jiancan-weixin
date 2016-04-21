@@ -22,22 +22,15 @@
   </div>
   <div style="width:100%;height:30px;"></div>
   <div class="bd spacing">
-    <a href="javascript:;" class="weui_btn weui_btn_primary">按钮</a>
+    <a href="javascript:;" class="weui_btn weui_btn_primary" @click="updateMobile">保存</a>
   </div>
-  <div id="toast" v-show="showTip">
-    <div class="weui_mask_transparent"></div>
-    <div class="weui_toast">
-      <i class="weui_icon_toast"></i>
-      <p class="weui_toast_content">已完成</p>
-    </div>
-  </div>
+
 </template>
 <script>
   export default {
     data () {
       return {
-        mobile: '',
-        showTip: false
+        mobile: ''
       }
     },
     methods: {
@@ -45,7 +38,7 @@
         let access_token = localStorage.getItem('jc_user_access_token')
         if (access_token != null) {
           this.$http.put('http://jiancan.me/api/u1/users/current.json', { access_token: access_token, user: { mobile: this.mobile } }).then(function (response) {
-            this.showTip = true
+            this.$dispatch('show-tip', response)
           }, function (response) {
             this.$dispatch('response-msg', response)
           })

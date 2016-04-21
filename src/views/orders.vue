@@ -16,6 +16,8 @@
     <div class="weui_tab_bd">
     </div>
   </div>
+  <div style="height:10px;">
+  </div>
   <div class="bd" v-if="isLogged">
     <div class="weui_panel" v-for="order in orders">
       <div class="weui_panel_hd">
@@ -31,11 +33,11 @@
                 <li v-for="order_product in order.order_products" class="weui_uploader_file" :style="{ backgroundImage: 'url(' + order_product.product.avatar + ')' }" ></li>
               </ul>
             </div>
-            <p class="weui_media_desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
+            <p class="weui_media_desc"></p>
             <ul class="weui_media_info">
-              <li class="weui_media_info_meta">￥ {{order.total_price}}</li>
+              <li class="weui_media_info_meta" style="color:red;">￥ {{order.total_price}}</li>
               <li class="weui_media_info_meta">{{order.created_at}}</li>
-              <li class="weui_media_info_meta weui_media_info_meta_extra">其它信息</li>
+              <li class="weui_media_info_meta weui_media_info_meta_extra" style="color:#ea8010;">{{order.status_text}}</li>
             </ul>
           </a>
         </div>
@@ -54,14 +56,13 @@
     },
     route: {
       data (transition) {
+        this.$dispatch('show-loading')
         let access_token = localStorage.getItem('jc_user_access_token')
         if (access_token != null) {
           this.isLogged = true
           this.$http.get('http://jiancan.me/api/u1/orders.json', { access_token: access_token }).then(function (response) {
-            console.log(response.data)
-            transition.next({
-              orders: response.data
-            })
+            this.$set('orders', response.data)
+            this.$dispatch('hide-loading')
           }, function (response) {
             this.$dispatch('response-msg', response)
           })

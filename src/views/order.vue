@@ -36,6 +36,15 @@
       </div>
       <div class="weui_cell">
         <div class="weui_cell_hd">
+          <img src="../assets/zhuangtai@64x64.png" alt="" style="width:20px;margin-right:5px;display:block">
+        </div>
+        <div class="weui_cell_bd weui_cell_primary">
+          <p>状态</p>
+        </div>
+        <div class="weui_cell_ft">{{order.status_text}}</div>
+      </div>
+      <div class="weui_cell">
+        <div class="weui_cell_hd">
           <img src="../assets/iconfont-shop.png" alt="" style="width:20px;margin-right:5px;display:block">
         </div>
         <div class="weui_cell_bd weui_cell_primary">
@@ -92,7 +101,7 @@
 
     <div class="weui_cells_title" v-if="order.takeout">支付</div>
     <div class="weui_cells weui_cells_access" v-if="order.takeout">
-      <a class="weui_cell" href="javascript:;">
+      <a class="weui_cell" href="javascript:;" @click="weiXinPay">
         <div class="weui_cell_hd">
           <img src="../assets/iconfont-weixinzhifu.png" alt="" style="width:20px;margin-right:5px;display:block">
         </div>
@@ -138,10 +147,47 @@
     },
     route: {
       data (transition) {
+        this.$dispatch('show-loading')
         let access_token = localStorage.getItem('jc_user_access_token')
         if (access_token != null) {
           this.$http.get('http://jiancan.me/api/u1/orders/one.json', { order_id: this.$route.params.order_id, access_token: access_token }).then(function (response) {
             this.$set('order', response.data)
+            this.$dispatch('hide-loading')
+          }, function (response) {
+            this.$dispatch('hide-loading')
+            this.$dispatch('response-msg', response)
+          })
+        }
+      }
+    },
+    methods: {
+      weiXinPay () {
+        let access_token = localStorage.getItem('jc_user_access_token')
+        let self = this
+        if (access_token != null) {
+          this.$http.get('http://jiancan.me/api/u1/pay.json', { order_id: this.$route.params.order_id, access_token: access_token }).then(function (response) {
+            console.log(response.data)
+            if (response.data.result_code !== undefined && response.data.result_code === 'FAIL') {
+              window.alert(response.data.err_code_des)
+            } else {
+              window.wx.chooseWXPay({
+                timestamp: response.data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                nonceStr: response.data.nonceStr, // 支付签名随机串，不长于 32 位
+                package: 'prepay_id=' + response.data.prepay_id, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                paySign: response.data.paySign, // 支付签名
+                success: function (res) {
+                  // 支付成功后的回调函数
+                  self.order.status_text = '已支付'
+                },
+                fail: function (res) {
+                  console.log(res)
+                },
+                cancel: function (res) {
+                  // 支付取消
+                }
+              })
+            }
           }, function (response) {
             this.$dispatch('response-msg', response)
           })

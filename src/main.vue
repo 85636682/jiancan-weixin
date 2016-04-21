@@ -1,16 +1,9 @@
 <template>
   <div id="main">
     <router-view></router-view>
-    <div class="weui_dialog_alert" v-show="showAlert">
-      <div class="weui_mask"></div>
-      <div class="weui_dialog">
-        <div class="weui_dialog_hd"><strong class="weui_dialog_title">{{error.title}}</strong></div>
-        <div class="weui_dialog_bd">{{error.msg}}</div>
-        <div class="weui_dialog_ft">
-          <a @click="showAlert = false" class="weui_btn_dialog primary">确定</a>
-        </div>
-      </div>
-    </div>
+    <show-alert :show.sync="showAlert" :error="error"></show-alert>
+    <tip-toast :show="showTip"></tip-toast>
+    <loading-toast :show="showLoading"></loading-toast>
   </div>
 </template>
 <script>
@@ -18,6 +11,8 @@
     data () {
       return {
         showAlert: false,
+        showTip: false,
+        showLoading: false,
         error: {
           title: '',
           msg: '',
@@ -29,8 +24,12 @@
     events: {
       'response-msg' (response) {
         if (response.status === 401) {
-          localStorage.email = ''
-          localStorage.token = ''
+          this.showAlert = true
+          this.error.title = '请先登录'
+          this.error.msg = '你还未授权登录或者验证过期！'
+          this.error.status = response.status
+          this.error.statusText = response.statusText
+          localStorage.setItem('jc_user_access_token', '')
         } else if (response.status === 0) {
           this.showAlert = true
           this.error.title = '网络错误'
@@ -44,7 +43,30 @@
           this.error.status = response.status
           this.error.statusText = response.statusText
         }
+      },
+      'show-alert' (errors) {
+        this.showAlert = true
+        this.error.title = errors.title
+        this.error.msg = errors.msgs
+      },
+      'show-tip' (response) {
+        this.showTip = true
+        var self = this
+        setTimeout(function () {
+          self.showTip = false
+        }, 1000)
+      },
+      'show-loading' (response) {
+        this.showLoading = true
+      },
+      'hide-loading' (response) {
+        this.showLoading = false
       }
+    },
+    components: {
+      'LoadingToast': require('./components/loading-toast.vue'),
+      'TipToast': require('./components/tip-toast.vue'),
+      'ShowAlert': require('./components/show-alert.vue')
     }
   }
 </script>

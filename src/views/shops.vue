@@ -54,7 +54,7 @@
             <rater :value.sync="data42" slot="value" active-color="#04BE02" :font-size=15 disabled></rater>
           </p>
           <p class="weui_media_desc">
-            月售{{}}单
+            月售{{shop.orders_by_month_count}}单
           </p>
         </div>
       </a>
@@ -75,10 +75,10 @@
     },
     route: {
       data (transition) {
+        this.$dispatch('show-loading')
         this.$http.get('http://jiancan.me/api/u1/shops.json', { }).then(function (response) {
-          transition.next({
-            shops: response.data
-          })
+          this.$set('shops', response.data)
+          this.$dispatch('hide-loading')
         }, function (response) {
           this.$dispatch('response-msg', response)
         })

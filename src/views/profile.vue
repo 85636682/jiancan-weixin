@@ -5,7 +5,7 @@
     </div>
   </navigation-bar>
   <div class="profile_header">
-    <div class="shop_card" style="padding-bottom:10px;width: 100%;height: 100px;display:-webkit-box;display:-moz-box;">
+    <div v-if="user.id" class="shop_card" style="padding-bottom:10px;width: 100%;height: 100px;display:-webkit-box;display:-moz-box;">
       <div class="image" style="margin-left:10px;width:100px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;">
         <img @click="inputFileClick" v-bind:src="user.avatar" width="100px" height="100px" />
         <input @change="uploadAvatar" v-el:avatar class="avatar" type="file" accept="image/*" style="display:none;" />
@@ -13,17 +13,21 @@
       <div class="content" style="padding-left:25px;-webkit-box-flex:1;-moz-box-flex:1;-webkit-box-ordinal-group:2;-moz-box-ordinal-group:2;margin:0 5px;">
         <a class="header" style="color:#FFF;">{{user.nickname}}</a>
         <div class="meta" style="color:#FFF;font-size:30px;">
-          <a class="button button-highlight button-large" @click="login" v-if="!user.id">
-            <i class="fa fa-sign-in"></i> 登录
-          </a>
         </div>
         <div class="description" style="color:#FFF;">
           <p></p>
         </div>
         <div class="extra" style="color:#FFF;">
-          <span v-if="!user.id">登录后可享受更多特权</span>
         </div>
       </div>
+    </div>
+    <div v-else class="shop_card" style="padding-bottom:10px;text-align:center;">
+      <a class="button button-highlight button-large" @click="login">
+        <i class="fa fa-weixin"></i> 登录
+      </a>
+      <p style="color:#FFF;">
+        登录后可享受更多特权
+      </p>
     </div>
   </div>
   <div class="weui_tab finance_bar">
@@ -57,6 +61,7 @@
     </div>
     <div class="weui_tab_bd"></div>
   </div>
+  <div class="weui_cells_title" style="height:20px;"></div>
   <div class="weui_cells weui_cells_access">
     <a class="weui_cell" v-link="'mobile'">
       <div class="weui_cell_hd">
@@ -74,7 +79,7 @@
       <div class="weui_cell_bd weui_cell_primary">
         <p>收货地址</p>
       </div>
-      <div class="weui_cell_ft">说明文字</div>
+      <div class="weui_cell_ft"></div>
     </a>
     <a class="weui_cell" v-link="'favorites'">
       <div class="weui_cell_hd">
@@ -83,7 +88,7 @@
       <div class="weui_cell_bd weui_cell_primary">
         <p>我的收藏</p>
       </div>
-      <div class="weui_cell_ft">说明文字</div>
+      <div class="weui_cell_ft"></div>
     </a>
   </div>
   <div class="weui_cells_title"></div>
@@ -95,7 +100,7 @@
       <div class="weui_cell_bd weui_cell_primary">
         <p>积分商城</p>
       </div>
-      <div class="weui_cell_ft">说明文字</div>
+      <div class="weui_cell_ft"></div>
     </a>
     <a class="weui_cell" href="javascript:;">
       <div class="weui_cell_hd">
@@ -104,7 +109,7 @@
       <div class="weui_cell_bd weui_cell_primary">
         <p>配送会员卡</p>
       </div>
-      <div class="weui_cell_ft">说明文字</div>
+      <div class="weui_cell_ft"></div>
     </a>
   </div>
   <div class="weui_cells_title"></div>
@@ -116,7 +121,7 @@
       <div class="weui_cell_bd weui_cell_primary">
         <p>服务中心</p>
       </div>
-      <div class="weui_cell_ft">说明文字</div>
+      <div class="weui_cell_ft"></div>
     </a>
     <a class="weui_cell" href="javascript:;">
       <div class="weui_cell_hd">
@@ -125,7 +130,7 @@
       <div class="weui_cell_bd weui_cell_primary">
         <p>下载简餐 App</p>
       </div>
-      <div class="weui_cell_ft">说明文字</div>
+      <div class="weui_cell_ft"></div>
     </a>
   </div>
   <Tabbar></Tabbar>
@@ -141,13 +146,16 @@
       data (transition) {
         let access_token = localStorage.getItem('jc_user_access_token')
         if (access_token != null) {
+          this.$dispatch('show-loading')
           this.$http.get('http://jiancan.me/api/u1/users/current.json', { access_token: access_token }).then(function (response) {
-            transition.next({
-              user: response.data
-            })
+            this.$set('user', response.data)
+            this.$dispatch('hide-loading')
           }, function (response) {
+            this.$dispatch('hide-loading')
             this.$dispatch('response-msg', response)
           })
+        } else {
+          this.$dispatch('response-msg', { 'status': 1000, 'statusText': '授权登录', 'data': { 'error': '请先授权登录才能使用如下功能！' } })
         }
       }
     },
@@ -160,7 +168,7 @@
 
         if (this.$els.avatar.value === '') return
         var formData = new FormData()
-        formData.append('access_token', localStorage.token)
+        formData.append('access_token', localStorage.getItem('jc_user_access_token'))
         formData.append('user[avatar]', this.$els.avatar.files[0])
 
         this.$http.put('http://jiancan.me/api/u1/users/current.json', formData).then(function (response) {

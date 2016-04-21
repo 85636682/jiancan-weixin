@@ -28,8 +28,10 @@
     },
     route: {
       data (transition) {
+        this.$dispatch('show-loading')
         this.$http.get('http://jiancan.me/api/u1/bookings.json', { bookingable_type: 'Room', access_token: localStorage.jc_user_access_token }).then(function (response) {
           this.$set('bookings', response.data)
+          this.$dispatch('hide-loading')
         }, function (response) {
           this.$dispatch('response-msg', response)
         })

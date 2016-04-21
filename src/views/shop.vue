@@ -92,12 +92,14 @@
     },
     route: {
       data (transition) {
+        this.$dispatch('show-loading')
         this.loadSelected()
         var params = this.$route.params
         this.$http.get('http://jiancan.me/api/u1/shops/one.json', { shop_id: params.shop_id }).then(function (response) {
           this.$set('shop', response.data)
           this.$set('currentCategory', this.shop.categories[0] ? this.shop.categories[0] : {})
           this.getProductsByCategory()
+          this.$dispatch('hide-loading')
         }, function (response) {
           this.$dispatch('response-msg', response)
         })
@@ -224,7 +226,7 @@
       },
       'go-check' () {
         if (this.selectedProducts.length > 0) {
-          this.$route.router.go({name: 'check', params: { shop_id: this.shop.id }})
+          this.$route.router.go({name: 'check', query: { shop_id: this.shop.id, express: this.shop.full_free_courier }})
         }
       }
     },

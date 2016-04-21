@@ -19,6 +19,12 @@
     <textarea :value.sync="order.address" :max=200 placeholder="请填写详细地址"></textarea>
   </group>
   <group title="购买商品">
+    <div class="weui_cell">
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>运费 <em style="color:red;font-size:12px;">满额￥{{express}}减免</em></p>
+      </div>
+      <div class="weui_cell_ft"><span style="color: green">￥ {{expressExpenses}}</span></div>
+    </div>
     <cell v-for="product in selectedProducts" :title=product.name :inline-desc="desc(product)">
       <div slot="value">
         <span style="color: green">￥ {{product.price*product.amount}}</span>
@@ -27,7 +33,7 @@
   </group>
   <div class="" style="width: 100%;height:50px;"></div>
   <check-bar :logged="logged">
-    <span slot="money">总计 ￥ {{totalPrice}}</span>
+    <span slot="money">总计 ￥ {{collect}}</span>
   </check-bar>
   <div class="weui_dialog_confirm" v-show="confirmLog">
     <div class="weui_mask"></div>
@@ -37,16 +43,6 @@
       <div class="weui_dialog_ft">
         <a @click="dontWantLog" class="weui_btn_dialog default">还是算了</a>
         <a @click="login" class="weui_btn_dialog primary">去登录</a>
-      </div>
-    </div>
-  </div>
-  <div class="weui_dialog_confirm" v-show="checkData">
-    <div class="weui_mask"></div>
-    <div class="weui_dialog">
-      <div class="weui_dialog_hd"><strong class="weui_dialog_title">请检查</strong></div>
-      <div class="weui_dialog_bd" style="color: red;">{{errorMsg}}</div>
-      <div class="weui_dialog_ft">
-        <a @click="goToEdit" class="weui_btn_dialog default">我改改呗</a>
       </div>
     </div>
   </div>
@@ -60,11 +56,11 @@
   import Radio from 'vux/components/radio/'
 
   export default {
-    props: ['shop_id'],
     data () {
       return {
         payMethodList: [ '在线支付', '货到付款' ],
         shopId: 0,
+        express: 0,
         selectedProducts: [],
         order: {
           payMethod: '在线支付',
@@ -76,13 +72,13 @@
         user: {},
         logged: false,
         confirmLog: true,
-        checkData: false,
         errorMsg: ''
       }
     },
     route: {
       data (transition) {
-        this.shopId = this.$route.params.shop_id
+        this.shopId = this.$route.query.shop_id
+        this.express = this.$route.query.express
         this.loadSelected()
         let access_token = localStorage.getItem('jc_user_access_token')
         if (access_token != null) {
@@ -105,14 +101,17 @@
         }
         return money
       },
+      expressExpenses () {
+        return this.totalPrice >= this.express ? 0 : 2.5
+      },
+      collect () {
+        return this.totalPrice >= this.express ? this.totalPrice : this.totalPrice + 2.5
+      },
       buildLink () {
         return '/shops/' + this.shopId
       }
     },
     methods: {
-      goToEdit () {
-        this.checkData = false
-      },
       currentYear () {
         var date = new Date()
         return date.getFullYear()
@@ -121,13 +120,13 @@
         return product.amount + ' x ￥' + product.price
       },
       loadSelected () {
-        let cart_datas = localStorage.getItem('jc_' + this.$route.params.shop_id + '_cart')
+        let cart_datas = localStorage.getItem('jc_' + this.$route.query.shop_id + '_cart')
         if (cart_datas != null) {
           this.selectedProducts = JSON.parse(cart_datas)
         }
       },
       clearSelected () {
-        localStorage.removeItem('jc_' + this.$route.params.shop_id + '_cart')
+        localStorage.removeItem('jc_' + this.$route.query.shop_id + '_cart')
       },
       formatProducts () {
         var formProducts = {}
@@ -140,13 +139,12 @@
         this.confirmLog = false
       },
       login () {
-        window.location.href = 'http://jiancan.me/weixin/authorize?request_url=' + this.$route.name + '&shop_id=' + this.$route.params.shop_id
+        window.location.href = 'http://jiancan.me/weixin/authorize?request_url=' + this.$route.name + '&shop_id=' + this.$route.query.shop_id
       }
     },
     events: {
       ordering () {
         this.errorMsg = ''
-        this.checkData = false
         if (this.order.address === '') {
           this.errorMsg += '（1）地址还未填写！'
         }
@@ -157,12 +155,12 @@
           this.errorMsg += '（3）未选择任何商品！'
         }
         if (this.errorMsg !== '') {
-          this.checkData = true
+          this.$dispatch('show-alert', { 'title': '请检查', 'msgs': this.errorMsg })
           return
         }
         var formData = new FormData()
         formData.append('access_token', localStorage.jc_user_access_token)
-        formData.append('order[shop_id]', this.$route.params.shop_id)
+        formData.append('order[shop_id]', this.$route.query.shop_id)
         formData.append('order[takeout]', 'true')
         formData.append('order[pay_method]', this.order.payMethod === '在线支付' ? 'online' : 'offline')
         formData.append('order[meal_time]', this.order.mealTime)
@@ -173,11 +171,9 @@
 
         this.$http.post('http://jiancan.me/api/u1/orders.json', formData).then(function (response) {
           let order_id = response.data.id
-          this.order = { }
           this.clearSelected()
           this.$route.router.go({ path: '/order/' + order_id })
         }, function (response) {
-          console.log(response)
           this.$dispatch('response-msg', response)
         })
       }

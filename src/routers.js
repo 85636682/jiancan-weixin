@@ -64,18 +64,13 @@ export default function (router) {
       name: 'order',
       component: function (resolve) {
         require(['./views/order.vue'], resolve)
-      }
+      },
+      auth: true
     },
-    '/check/:shop_id': {
+    '/check': {
       name: 'check',
       component: function (resolve) {
         require(['./views/check.vue'], resolve)
-      }
-    },
-    '/pay': {
-      name: 'pay',
-      component: function (resolve) {
-        require(['./views/pay.vue'], resolve)
       }
     },
     '/profile': {
@@ -88,19 +83,22 @@ export default function (router) {
       name: 'mobile',
       component: function (resolve) {
         require(['./views/user/mobile.vue'], resolve)
-      }
+      },
+      auth: true
     },
     '/favorites': {
       name: 'favorites',
       component: function (resolve) {
         require(['./views/user/favorites.vue'], resolve)
-      }
+      },
+      auth: true
     },
     '/addresses': {
       name: 'addresses',
       component: function (resolve) {
         require(['./views/user/addresses.vue'], resolve)
-      }
+      },
+      auth: true
     },
     '/authorize': {
       name: 'authorize',
