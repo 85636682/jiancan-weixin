@@ -2,7 +2,7 @@
   <x-header>
     订台单
     <div slot="right">
-      <a @click="login" v-show="!logged" class="weui_btn weui_btn_mini weui_btn_warn" style="margin-top:8px;">登录</a>
+      <a @click="login" v-show="!logged" class="weui_btn weui_btn_mini weui_btn_warn" style="margin-top:-4px;">登录</a>
     </div>
   </x-header>
   <group title="支付方式">
@@ -15,7 +15,28 @@
   <group>
     <x-input :value.sync="order.mobile" title="送餐电话" placeholder="送餐电话"></x-input>
     <textarea :value.sync="order.address" :max=200 placeholder="请填写详细地址"></textarea>
+    <a class="weui_cell" href="javascript:;" @click="showAddressesSheet = true">
+      <div class="weui_cell_bd weui_cell_primary">
+        <p style="color:red;">选择收货地址</p>
+      </div>
+      <div class="weui_cell_ft">{{user.receiving_addresses.length}}个</div>
+    </a>
   </group>
+  <!--BEGIN actionSheet-->
+  <div class="actionSheet_wrap">
+    <div class="weui_mask_transition" :class="{'weui_fade_toggle': showAddressesSheet}" :style="{display: showAddressesSheet ? 'block' : 'none'}" @click="showAddressesSheet = false"></div>
+    <div class="weui_actionsheet" :class="{'weui_actionsheet_toggle': showAddressesSheet}">
+      <div class="weui_actionsheet_menu">
+        <div class="weui_actionsheet_cell" v-for="address in user.receiving_addresses" @click="selectAddress(address)">
+          {{address.street}}
+        </div>
+      </div>
+      <div class="weui_actionsheet_action">
+        <div class="weui_actionsheet_cell" @click="showAddressesSheet = false">取消</div>
+      </div>
+    </div>
+  </div>
+  <!--END actionSheet-->
   <group title="购买商品">
     <div class="weui_cell">
       <div class="weui_cell_bd weui_cell_primary">
@@ -68,7 +89,10 @@
           mobile: '',
           address: ''
         },
-        user: {},
+        user: {
+          receiving_addresses: []
+        },
+        showAddressesSheet: false,
         logged: false,
         confirmLog: true,
         errorMsg: ''
@@ -85,7 +109,16 @@
           this.confirmLog = false
           this.$http.get('http://jiancan.me/api/u1/users/current.json', { access_token: access_token }).then(function (response) {
             this.$set('user', response.data)
-            this.order.mobile = this.user.mobile
+            if (this.user.receiving_addresses.length > 0) {
+              for (var i = 0; i < this.user.receiving_addresses.length; i++) {
+                if (this.user.receiving_addresses[i].defaulted) {
+                  this.order.mobile = this.user.receiving_addresses[i].mobile
+                  this.order.address = this.user.receiving_addresses[i].street
+                }
+              }
+            } else {
+              this.order.mobile = this.user.mobile
+            }
           }, function (response) {
             this.$dispatch('response-msg', response)
           })
@@ -139,6 +172,13 @@
       },
       login () {
         window.location.href = 'http://jiancan.me/weixin/authorize?request_url=' + this.$route.name + '&shop_id=' + this.$route.query.shop_id
+      },
+      showAddresses () {
+        this.showAddressesSheet = !this.showAddressesSheet
+      },
+      selectAddress (address) {
+        this.order.mobile = this.address.mobile
+        this.order.address = this.address.street
       }
     },
     events: {
@@ -189,6 +229,3 @@
     }
   }
 </script>
-<style lang="scss">
-  @import '~vux/vux.css';
-</style>

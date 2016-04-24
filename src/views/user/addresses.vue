@@ -2,7 +2,8 @@
   <x-header>收货地址</x-header>
   <div class="weui_panel weui_panel_access">
     <div class="weui_panel_bd">
-      <div class="weui_media_box weui_media_text" v-for="address in addresses">
+      <div class="weui_media_box weui_media_text" v-for="address in addresses" @click="setDefaultAddress(address)">
+        <img v-show="address.defaulted" src="../../assets/default.png" style="position: absolute;top:0px;right:0px;width:30px;" />
         <h3 class="weui_media_title">{{address.consignee}}</h3>
         <h3 class="weui_media_desc">{{address.street}}</h3>
       </div>
@@ -76,6 +77,18 @@
           this.$http.post('http://jiancan.me/api/u1/receiving_addresses.json', formData).then(function (response) {
             this.addresses.push(response.data)
             this.newAddress = { consignee: '', mobile: '', street: '' }
+          }, function (response) {
+            this.$dispatch('response-msg', response)
+          })
+        }
+      },
+      setDefaultAddress (address) {
+        let access_token = localStorage.getItem('jc_user_access_token')
+        if (access_token != null) {
+          this.$http.put('http://jiancan.me/api/u1/receiving_addresses/default.json', { access_token: access_token, address_id: address.id }).then(function (response) {
+            if (response.data.result_code === 'SUCCESS') {
+              this.addresses.push(response.data)
+            }
           }, function (response) {
             this.$dispatch('response-msg', response)
           })

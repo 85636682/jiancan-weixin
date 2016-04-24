@@ -57,7 +57,8 @@ export default {
   data () {
     return {
       product: {},
-      selectedProducts: []
+      selectedProducts: [],
+      showCart: false
     }
   },
   route: {
@@ -95,8 +96,8 @@ export default {
       }
     },
     addProduct (product) {
-      var index = this.checkSelected(product)
-      if (index <= 0) {
+      var index = this.getIndex(product)
+      if (index < 0) {
         this.selectedProducts.push({ id: product.id, amount: 1, name: product.name, price: product.price })
       } else {
         this.selectedProducts[index].amount++
@@ -104,8 +105,8 @@ export default {
       this.saveSelected()
     },
     removeProduct (product) {
-      var index = this.checkSelected(product)
-      if (index > 0) {
+      var index = this.getIndex(product)
+      if (index >= 0) {
         if (this.selectedProducts[index].amount > 1) {
           this.selectedProducts[index].amount--
         } else {
@@ -124,6 +125,25 @@ export default {
         }
       }
       return 0
+    },
+    getIndex (product) {
+      for (var i = 0; i < this.selectedProducts.length; i++) {
+        if (product.id === this.selectedProducts[i].id) {
+          return i
+        }
+      }
+      return -1
+    }
+  },
+  events: {
+    minus (product) {
+      this.removeProduct(product)
+    },
+    plus (product) {
+      this.addProduct(product)
+    },
+    'show-cart' () {
+      this.showCart = !this.showCart
     }
   },
   components: {
