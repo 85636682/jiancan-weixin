@@ -32,39 +32,6 @@
   margin:0 5px;
 }
 
-.navigation_bar {
-  width: 100%;
-  display: -webkit-box;
-  display: -moz-box;
-  height: 50px;
-  background-color: #00b5ad;
-  color: #FFF;
-}
-
-.navigation_bar .left, .navigation_bar .right {
-  width: 100px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  margin: 0 10px;
-  padding-top: 12px;
-}
-
-.navigation_bar .right {
-  text-align: right;
-  -webkit-box-ordinal-group:2;
-  -moz-box-ordinal-group:2;
-}
-
-.navigation_bar .middle {
-  font-size: 17px;
-  padding-top: 10px;
-  text-align: center;
-  -webkit-box-flex:1;
-  -moz-box-flex:1;
-  -webkit-box-ordinal-group:2;
-  -moz-box-ordinal-group:2;
-}
-
 .shop_tab .weui_navbar, .finance_bar .weui_navbar {
   background-color: #FFF;
 }
@@ -195,6 +162,15 @@ i.icon-profile-coins, i.icon-service-phone {
   height: 100px;
 }
 
+.order_product_list_bd .weui_media_box.weui_media_appmsg .weui_media_hd {
+  width: 100px;
+  height: 100px;
+}
+
+.order_product_list_bd .weui_media_box.weui_media_appmsg .weui_media_bd {
+  height: 100px;
+}
+
 .product_header {
 
 }
@@ -228,7 +204,6 @@ i.icon-profile-coins, i.icon-service-phone {
   margin:0 5px;
   line-height: 80px;
   text-align: right;
-  padding-right: 10px;
 }
 
 .signin_line {

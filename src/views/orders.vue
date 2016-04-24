@@ -1,13 +1,12 @@
 <template>
-  <navigation-bar>
-    <div slot="middle_content">
-      订单列表
-    </div>
-  </navigation-bar>
+  <x-header>订单列表</x-header>
   <div class="weui_tab shop_tab">
     <div class="weui_navbar">
       <div class="weui_navbar_item">
         所有订单
+      </div>
+      <div class="weui_navbar_item" @click="goToComments">
+        待评价
       </div>
       <div class="weui_navbar_item" @click="goToBookings">
         预订单
@@ -47,6 +46,8 @@
   <Tabbar></Tabbar>
 </template>
 <script>
+  import XHeader from 'vux/components/x-header'
+
   export default {
     data () {
       return {
@@ -72,11 +73,14 @@
     methods: {
       goToBookings () {
         this.$route.router.go({name: 'bookings'})
+      },
+      goToComments () {
+        this.$route.router.go({name: 'mycomments'})
       }
     },
     components: {
       'Tabbar': require('../components/tabbar.vue'),
-      'NavigationBar': require('../components/navigation-bar.vue')
+      XHeader
     }
   }
 </script>

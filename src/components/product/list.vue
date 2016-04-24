@@ -3,6 +3,7 @@
     <div class="weui_panel_hd">{{title}}</div>
     <div class="weui_panel_bd product_list_bd">
       <div v-for="product in products" class="weui_media_box weui_media_appmsg">
+        <img v-if="product.recommend" src="../../assets/recommend-1.png" style="position: absolute;top:0px;right:0px;width:30px;" />
         <div class="weui_media_hd" @click="goToProductPage(product)">
           <img class="weui_media_appmsg_thumb" v-bind:src="product.avatar80x80" alt="">
         </div>
@@ -13,7 +14,7 @@
           </p>
           <h3 class="weui_media_title" style="color: red;">￥ {{product.price}}</h3>
           <p class="weui_media_desc">
-            销售{{}}份
+            销售{{product.orders_by_month_count}}份
           </p>
         </div>
         <div class="weui_media_extra">

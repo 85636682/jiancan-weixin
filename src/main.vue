@@ -70,3 +70,21 @@
     }
   }
 </script>
+<style lang="scss">
+  @import '~vux/vux.css';
+  .x-header {
+    background-color:#00b5ad;
+  }
+  .x-header .x-header-title a,.x-header .x-header-title a:active,.x-header h1 a,.x-header h1 a:active {
+    color: #fff
+  }
+  .x-header .x-header-left,.x-header .x-header-right {
+    color: #fff
+  }
+  .x-header .x-header-left a,.x-header .x-header-left button,.x-header .x-header-right a,.x-header .x-header-right button {
+    color: #fff
+  }
+  .x-header .x-header-left .x-header-back:before {
+    border-color: #fff;
+  }
+</style>

@@ -1,9 +1,5 @@
 <template>
-  <navigation-bar :go-back="buildLink">
-    <div slot="middle_content">
-      顾客评论
-    </div>
-  </navigation-bar>
+  <x-header>顾客评论</x-header>
   <div class="weui_panel">
     <div class="weui_panel_hd">文字列表附来源</div>
     <div class="weui_panel_bd">
@@ -20,6 +16,8 @@
   </div>
 </template>
 <script>
+import XHeader from 'vux/components/x-header'
+
 export default {
   props: ['shop_id'],
   data () {
@@ -47,7 +45,7 @@ export default {
     }
   },
   components: {
-    'NavigationBar': require('../components/navigation-bar.vue')
+    XHeader
   }
 }
 </script>

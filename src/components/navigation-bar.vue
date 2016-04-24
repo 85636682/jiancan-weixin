@@ -1,27 +1,47 @@
 <template>
-  <div class="navigation_bar">
-    <div class="middle">
-      <slot name="middle_content">
-      </slot>
+  <div class="x-header">
+    <div class="x-header-left">
+      <a class="x-header-back" @click.preventDefault v-show="leftOptions.showBack" @click="onClickBack">{{leftOptions.backText}}</a>
+      <slot name="left"></slot>
     </div>
-    <div class="left">
-      <a class="go_back" @click="GoBack">
-        <i class="fa fa-arrow-left"></i>
-      </a>
-    </div>
-    <div class="right">
-      <slot name="right_items">
-      </slot>
+    <h1 class="x-header-title"><slot></slot></h1>
+    <div class="x-header-right">
+      <a class="x-header-more" @click.preventDefault @click="$dispatch('on-click-more')" v-if="rightOptions.showMore"></a>
+      <slot name="right"></slot>
     </div>
   </div>
 </template>
+
 <script>
-  export default {
-    props: ['goBack'],
-    methods: {
-      GoBack () {
-        this.$route.router.go({ path: this.goBack })
+export default {
+  props: {
+    leftOptions: {
+      type: Object,
+      default () {
+        return {
+          showBack: true,
+          backText: 'Back',
+          preventGoBack: false
+        }
+      }
+    },
+    rightOptions: {
+      type: Object,
+      default () {
+        return {
+          showMore: false
+        }
+      }
+    }
+  },
+  methods: {
+    onClickBack: function () {
+      if (this.leftOptions.preventGoBack) {
+        this.$dispatch('on-click-back')
+      } else {
+        history.back()
       }
     }
   }
+}
 </script>

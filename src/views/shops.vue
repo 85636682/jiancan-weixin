@@ -1,9 +1,5 @@
 <template>
-  <navigation-bar>
-    <div slot="middle_content">
-      店铺列表
-    </div>
-  </navigation-bar>
+  <x-header>店铺列表</x-header>
   <div class="weui_tab shop_tab">
     <div class="weui_navbar">
       <div class="weui_navbar_item" @click="showCategoryList">
@@ -63,6 +59,7 @@
   <Tabbar></Tabbar>
 </template>
 <script>
+  import XHeader from 'vux/components/x-header'
   import Rater from 'vux/components/rater'
 
   export default {
@@ -129,7 +126,7 @@
     },
     components: {
       'Tabbar': require('../components/tabbar.vue'),
-      'NavigationBar': require('../components/navigation-bar.vue'),
+      XHeader,
       Rater
     }
   }

@@ -1,9 +1,5 @@
 <template>
-  <navigation-bar go-back="/orders">
-    <div slot="middle_content">
-      我的订单
-    </div>
-  </navigation-bar>
+  <x-header>我的订单</x-header>
   <div class="bd">
     <div class="weui_cells_title">订单详情</div>
     <div class="weui_cells">
@@ -110,15 +106,6 @@
         </div>
         <div class="weui_cell_ft">马上支付</div>
       </a>
-      <a class="weui_cell" href="javascript:;">
-        <div class="weui_cell_hd">
-          <img src="../assets/iconfont-zhifubaozhifu.png" alt="" style="width:20px;margin-right:5px;display:block">
-        </div>
-        <div class="weui_cell_bd weui_cell_primary">
-          <p>支付宝支付</p>
-        </div>
-        <div class="weui_cell_ft">马上支付</div>
-      </a>
     </div>
 
     <div class="weui_cells_title">商品列表</div>
@@ -137,6 +124,8 @@
   </div>
 </template>
 <script>
+  import XHeader from 'vux/components/x-header'
+
   export default {
     data () {
       return {
@@ -166,7 +155,6 @@
         let self = this
         if (access_token != null) {
           this.$http.get('http://jiancan.me/api/u1/pay.json', { order_id: this.$route.params.order_id, access_token: access_token }).then(function (response) {
-            console.log(response.data)
             if (response.data.result_code !== undefined && response.data.result_code === 'FAIL') {
               window.alert(response.data.err_code_des)
             } else {
@@ -195,7 +183,7 @@
       }
     },
     components: {
-      'NavigationBar': require('../components/navigation-bar.vue')
+      XHeader
     }
   }
 </script>

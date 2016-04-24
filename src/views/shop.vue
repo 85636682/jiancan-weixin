@@ -1,12 +1,10 @@
 <template>
-  <navigation-bar go-back="/shops">
-    <div slot="middle_content">
-      {{shop.name}}
-    </div>
-    <div slot="right_items">
+  <x-header>
+    {{shop.name}}
+    <div slot="right">
       <i class="fa fa-heart-o" v-bind:class="[isFavorited ? 'fa-heart' : 'fa-heart-o']" @click="favorite"></i>
     </div>
-  </navigation-bar>
+  </x-header>
   <div class="shop_header">
     <div class="shop_card" style="width: 100%;height: 80px;display:-webkit-box;display:-moz-box;">
       <div class="image" style="margin-left:10px;width:70px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;">
@@ -74,6 +72,7 @@
 </template>
 <script>
   import Rater from 'vux/components/rater'
+  import XHeader from 'vux/components/x-header'
 
   export default {
     data () {
@@ -231,7 +230,7 @@
       }
     },
     components: {
-      'NavigationBar': require('../components/navigation-bar.vue'),
+      XHeader,
       'ShoppingCart': require('../components/shopping-cart.vue'),
       'ShoppingCartList': require('../components/shopping-cart-list.vue'),
       'product-list': require('../components/product/list.vue'),
@@ -239,6 +238,3 @@
     }
   }
 </script>
-<style lang="scss">
-@import '~vux/vux.css';
-</style>

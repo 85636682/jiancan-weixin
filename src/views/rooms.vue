@@ -1,9 +1,5 @@
 <template>
-  <navigation-bar :go-back="buildLink">
-    <div slot="middle_content">
-      选择台号
-    </div>
-  </navigation-bar>
+  <x-header>选择台号</x-header>
   <div class="weui_grids">
     <a class="weui_grid js_grid" v-for="room in rooms" v-link="'/booking/' + room.id">
       <div class="weui_grid_icon">
@@ -16,6 +12,8 @@
   </div>
 </template>
 <script>
+import XHeader from 'vux/components/x-header'
+
 export default {
   props: ['shop_id'],
   data () {
@@ -43,7 +41,7 @@ export default {
     }
   },
   components: {
-    'NavigationBar': require('../components/navigation-bar.vue')
+    XHeader
   }
 }
 </script>

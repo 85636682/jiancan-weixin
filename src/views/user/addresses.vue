@@ -1,9 +1,5 @@
 <template>
-  <navigation-bar go-back="/profile">
-    <div slot="middle_content">
-      收货地址
-    </div>
-  </navigation-bar>
+  <x-header>收货地址</x-header>
   <div class="weui_panel weui_panel_access">
     <div class="weui_panel_bd">
       <div class="weui_media_box weui_media_text" v-for="address in addresses">
@@ -42,6 +38,8 @@
   </div>
 </template>
 <script>
+  import XHeader from 'vux/components/x-header'
+
   export default {
     data () {
       return {
@@ -85,7 +83,7 @@
       }
     },
     components: {
-      'NavigationBar': require('../../components/navigation-bar.vue')
+      XHeader
     }
   }
 </script>

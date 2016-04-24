@@ -42,6 +42,18 @@ export default function (router) {
         require(['./views/comments.vue'], resolve)
       }
     },
+    '/user/comments': {
+      name: 'mycomments',
+      component: function (resolve) {
+        require(['./views/user/comments.vue'], resolve)
+      }
+    },
+    '/user/commenton/:order_product_id': {
+      name: 'commenton',
+      component: function (resolve) {
+        require(['./views/user/commenton.vue'], resolve)
+      }
+    },
     '/bookings': {
       name: 'bookings',
       component: function (resolve) {

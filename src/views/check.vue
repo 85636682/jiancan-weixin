@@ -1,12 +1,10 @@
 <template>
-  <navigation-bar :go-back="buildLink">
-    <div slot="middle_content">
-      完善订单
-    </div>
-    <div slot="right_items">
+  <x-header>
+    订台单
+    <div slot="right">
       <a @click="login" v-show="!logged" class="weui_btn weui_btn_mini weui_btn_warn" style="margin-top:8px;">登录</a>
     </div>
-  </navigation-bar>
+  </x-header>
   <group title="支付方式">
     <radio :options="payMethodList" :value.sync="order.payMethod"></radio>
   </group>
@@ -54,6 +52,7 @@
   import Cell from 'vux/components/cell/'
   import Group from 'vux/components/group/'
   import Radio from 'vux/components/radio/'
+  import XHeader from 'vux/components/x-header'
 
   export default {
     data () {
@@ -179,14 +178,14 @@
       }
     },
     components: {
-      'NavigationBar': require('../components/navigation-bar.vue'),
       'CheckBar': require('../components/check-bar.vue'),
       Textarea,
       XInput,
       Datetime,
       Group,
       Cell,
-      Radio
+      Radio,
+      XHeader
     }
   }
 </script>

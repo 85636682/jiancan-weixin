@@ -1,9 +1,5 @@
 <template>
-  <navigation-bar>
-    <div slot="middle_content">
-      我的
-    </div>
-  </navigation-bar>
+  <x-header>我的</x-header>
   <div class="profile_header">
     <div v-if="user.id" class="shop_card" style="padding-bottom:10px;width: 100%;height: 100px;display:-webkit-box;display:-moz-box;">
       <div class="image" style="margin-left:10px;width:100px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;">
@@ -136,6 +132,8 @@
   <Tabbar></Tabbar>
 </template>
 <script>
+  import XHeader from 'vux/components/x-header'
+
   export default {
     data () {
       return {
@@ -183,7 +181,7 @@
     },
     components: {
       'Tabbar': require('../components/tabbar.vue'),
-      'NavigationBar': require('../components/navigation-bar.vue')
+      XHeader
     }
   }
 </script>

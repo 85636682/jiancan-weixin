@@ -1,9 +1,5 @@
 <template>
-  <navigation-bar :go-back="buildLink">
-    <div slot="middle_content">
-      订台单
-    </div>
-  </navigation-bar>
+  <x-header>订台单</x-header>
   <div class="weui_cells_title">预定台桌</div>
   <div class="weui_cells">
     <div class="weui_cell">
@@ -36,6 +32,7 @@
 </template>
 <script>
   import Datetime from 'vux/components/datetime/'
+  import XHeader from 'vux/components/x-header'
 
   export default {
     props: ['room_id'],
@@ -98,11 +95,8 @@
       }
     },
     components: {
-      'NavigationBar': require('../components/navigation-bar.vue'),
+      XHeader,
       Datetime
     }
   }
 </script>
-<style lang="scss">
-  @import '~vux/vux.css';
-</style>

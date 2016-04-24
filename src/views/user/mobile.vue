@@ -1,9 +1,5 @@
 <template>
-  <navigation-bar go-back="/profile">
-    <div slot="middle_content">
-      绑定手机
-    </div>
-  </navigation-bar>
+  <x-header>绑定手机</x-header>
   <div class="weui_cells_title">绑定手机</div>
   <div class="weui_cells">
     <div class="weui_cell weui_cell_select weui_select_before">
@@ -27,6 +23,8 @@
 
 </template>
 <script>
+  import XHeader from 'vux/components/x-header'
+
   export default {
     data () {
       return {
@@ -46,7 +44,7 @@
       }
     },
     components: {
-      'NavigationBar': require('../../components/navigation-bar.vue')
+      XHeader
     }
   }
 </script>

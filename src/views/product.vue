@@ -1,12 +1,10 @@
 <template>
-  <navigation-bar :go-back="buildLink">
-    <div slot="middle_content">
-      {{product.name}}
-    </div>
-    <div slot="right_items">
+  <x-header>
+    {{product.name}}
+    <div slot="right">
       <i class="fa fa-heart-o"></i>
     </div>
-  </navigation-bar>
+  </x-header>
   <div class="product_header">
     <img :src="product.avatar" />
     <div class="product_card">
@@ -53,6 +51,7 @@
 </template>
 <script>
 import Rater from 'vux/components/rater'
+import XHeader from 'vux/components/x-header'
 
 export default {
   data () {
@@ -128,7 +127,7 @@ export default {
     }
   },
   components: {
-    'NavigationBar': require('../components/navigation-bar.vue'),
+    XHeader,
     'ShoppingCart': require('../components/shopping-cart.vue'),
     'ShoppingCartList': require('../components/shopping-cart-list.vue'),
     Rater

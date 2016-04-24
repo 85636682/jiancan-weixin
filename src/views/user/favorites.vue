@@ -1,9 +1,5 @@
 <template>
-  <navigation-bar go-back="/profile">
-    <div slot="middle_content">
-      我的收藏
-    </div>
-  </navigation-bar>
+  <x-header>我的收藏</x-header>
   <div class="weui_panel weui_panel_access">
     <div class="weui_panel_hd">喜爱的店铺</div>
     <div class="weui_panel_bd shop_list_bd">
@@ -27,6 +23,7 @@
   </div>
 </template>
 <script>
+  import XHeader from 'vux/components/x-header'
   import Rater from 'vux/components/rater'
 
   export default {
@@ -48,7 +45,7 @@
       }
     },
     components: {
-      'NavigationBar': require('../../components/navigation-bar.vue'),
+      XHeader,
       Rater
     }
   }

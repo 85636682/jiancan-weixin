@@ -1,9 +1,5 @@
 <template>
-  <navigation-bar go-back="/orders">
-    <div slot="middle_content">
-      订台单
-    </div>
-  </navigation-bar>
+  <x-header>订台单</x-header>
   <div class="weui_panel">
     <div class="weui_panel_hd">预定台桌</div>
     <div class="weui_panel_bd">
@@ -20,6 +16,8 @@
   </div>
 </template>
 <script>
+  import XHeader from 'vux/components/x-header'
+
   export default {
     data () {
       return {
@@ -38,7 +36,7 @@
       }
     },
     components: {
-      'NavigationBar': require('../components/navigation-bar.vue')
+      XHeader
     }
   }
 </script>
