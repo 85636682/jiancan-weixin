@@ -28,7 +28,7 @@
     <div class="weui_actionsheet" :class="{'weui_actionsheet_toggle': showAddressesSheet}">
       <div class="weui_actionsheet_menu">
         <div class="weui_actionsheet_cell" v-for="address in user.receiving_addresses" @click="selectAddress(address)">
-          {{address.street}}
+          <i class="fa fa-map-marker"></i> {{address.street}}
         </div>
       </div>
       <div class="weui_actionsheet_action">

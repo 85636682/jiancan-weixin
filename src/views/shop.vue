@@ -31,12 +31,12 @@
       <div :class="{ 'tab_selected': selectedTab === '分类' }" :class="[showCategory ? 'category_active' : '']" class="weui_navbar_item" @click="showCategoryList">
         {{selectedCategoryName}} <i class="fa" :class="[showCategory ? 'fa-long-arrow-down' : 'fa-long-arrow-up']"></i>
       </div>
-      <a class="weui_navbar_item" v-link="'/rooms/' + shop.id" :class="{ 'tab_selected': selectedTab === '评论' }" @click="selectedTab='评论'">
+      <a class="weui_navbar_item" v-link="'/rooms/' + shop.id">
         订台
       </a>
-      <div class="weui_navbar_item" :class="{ 'tab_selected': selectedTab === '商家' }" @click="showComments=!showComments">
+      <a v-link="'/comments/' + shop.id" class="weui_navbar_item">
         评论（{{shop.comments ? shop.comments.length : 0}}）
-      </div>
+      </a>
     </div>
     <div class="weui_tab_bd"></div>
   </div>
@@ -45,23 +45,13 @@
     <div class="category_list_box_item">
       <div class="category_list_bd arrow_box" v-show="showCategory">
         <ul>
+          <li @click="getRecommendProducts">店家推荐</li>
           <li v-for="category in shop.categories" @click="selectedCategory(category)">{{category.name}}</li>
         </ul>
       </div>
     </div>
     <div class="category_list_box_item"></div>
     <div class="category_list_box_item"></div>
-  </div>
-
-  <div class="weui_panel weui_panel_access" v-show="showComments">
-    <div class="weui_panel_hd">顾客评论</div>
-    <div class="weui_panel_bd">
-      <div class="weui_media_box weui_media_text" v-for="comment in shop.comments">
-        <h4 class="weui_media_title">{{comment.user.nickname}}</h4>
-        <p class="weui_media_desc">{{comment.content}}</p>
-      </div>
-    </div>
-    <a v-link="'/comments/' + shop.id" class="weui_panel_ft">查看更多</a>
   </div>
 
   <product-list :title="currentCategory.name" :products="products" :selected-products="selectedProducts"></product-list>
@@ -85,7 +75,7 @@
         selectedProducts: [],
         showCart: false,
         showCategory: false,
-        selectedCategoryName: '所有分类',
+        selectedCategoryName: '分类',
         showComments: false
       }
     },
@@ -96,8 +86,8 @@
         var params = this.$route.params
         this.$http.get('http://jiancan.me/api/u1/shops/one.json', { shop_id: params.shop_id }).then(function (response) {
           this.$set('shop', response.data)
+          this.$set('products', response.data.recommend_products)
           this.$set('currentCategory', this.shop.categories[0] ? this.shop.categories[0] : {})
-          this.getProductsByCategory()
           this.$dispatch('hide-loading')
         }, function (response) {
           this.$dispatch('response-msg', response)
@@ -164,6 +154,9 @@
         }, function (response) {
           this.$dispatch('response-msg', response)
         })
+      },
+      getRecommendProducts () {
+        this.$set('products', this.shop.recommend_products)
       },
       checkSelected (product) {
         for (var i = 0; i < this.selectedProducts.length; i++) {
