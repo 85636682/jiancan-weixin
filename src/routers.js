@@ -118,10 +118,16 @@ export default function (router) {
         require(['./views/authorize.vue'], resolve)
       }
     },
-    '/what': {
-      name: 'what',
+    '/coupons': {
+      name: 'coupons',
       component: function (resolve) {
-        require(['./views/what.vue'], resolve)
+        require(['./views/coupons.vue'], resolve)
+      }
+    },
+    '/coupon/:coupon_id': {
+      name: 'coupon',
+      component: function (resolve) {
+        require(['./views/coupon.vue'], resolve)
       }
     }
   })

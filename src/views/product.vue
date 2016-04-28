@@ -33,12 +33,12 @@
   <div class="weui_panel">
     <div class="weui_panel_hd">美食评价</div>
     <div class="weui_panel_bd">
-      <div class="weui_media_box weui_media_text">
-        <h4 class="weui_media_title">标题一</h4>
-        <p class="weui_media_desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
+      <div v-for="comment in product.comments" class="weui_media_box weui_media_text">
+        <h4 class="weui_media_title">{{comment.user.nickname}}</h4>
+        <p class="weui_media_desc">{{comment.content}}</p>
         <ul class="weui_media_info">
           <li class="weui_media_info_meta">文字来源</li>
-          <li class="weui_media_info_meta">时间</li>
+          <li class="weui_media_info_meta">{{comment.created_at}}</li>
           <li class="weui_media_info_meta weui_media_info_meta_extra">其它信息</li>
         </ul>
       </div>
@@ -56,7 +56,9 @@ import XHeader from 'vux/components/x-header'
 export default {
   data () {
     return {
-      product: {},
+      product: {
+        comments: []
+      },
       selectedProducts: [],
       showCart: false
     }

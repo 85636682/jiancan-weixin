@@ -9,11 +9,11 @@
           </div>
           <p class="weui_tabbar_label">点餐</p>
         </a>
-        <a v-link="{ path: '/what' }" class="weui_tabbar_item">
+        <a v-link="{ path: '/coupons' }" class="weui_tabbar_item">
           <div class="weui_tabbar_icon">
             <img src="../assets/iconfont-meishitiyan.png" alt="">
           </div>
-          <p class="weui_tabbar_label">吃什么</p>
+          <p class="weui_tabbar_label">优惠券</p>
         </a>
         <a v-link="{ path: '/orders', activeClass: 'weui_bar_item_on' }" class="weui_tabbar_item">
           <div class="weui_tabbar_icon">

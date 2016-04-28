@@ -44,6 +44,8 @@
         }
         if (request_url === 'check') {
           self.$route.router.go({ name: request_url, query: { shop_id: self.$route.query.shop_id, express: this.$route.query.express } })
+        } else if (request_url === 'coupon') {
+          self.$route.router.go({ name: request_url, params: { coupon_id: self.$route.query.coupon_id } })
         } else {
           self.$route.router.go({ name: request_url })
         }
@@ -65,6 +67,8 @@
       setTimeout(function () {
         if (request_url === 'check') {
           self.$route.router.go({ name: request_url, params: { shop_id: self.$route.query.shop_id } })
+        } else if (request_url === 'coupon') {
+          self.$route.router.go({ name: request_url, params: { coupon_id: self.$route.query.coupon_id } })
         } else {
           self.$route.router.go({ name: request_url })
         }

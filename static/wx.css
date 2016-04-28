@@ -222,3 +222,13 @@ i.icon-profile-coins, i.icon-service-phone {
 .oauth_logos .weui_grids a {
   border: 0px;
 }
+
+.jc-img-responsive {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.jc-margin-bottom-xs {
+  margin-bottom: 0.5rem;
+}

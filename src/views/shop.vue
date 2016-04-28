@@ -8,7 +8,7 @@
   <div class="shop_header">
     <div class="shop_card" style="width: 100%;height: 80px;display:-webkit-box;display:-moz-box;">
       <div class="image" style="margin-left:10px;width:70px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;">
-        <img v-bind:src="shop.avatar" width="70px" height="70px" />
+        <img v-bind:src="shop.avatar80x80" width="70px" height="70px" />
       </div>
       <div class="content" style="-webkit-box-flex:1;-moz-box-flex:1;-webkit-box-ordinal-group:2;-moz-box-ordinal-group:2;margin:0 5px;">
         <a class="header" style="color:#FFF;">{{shop.name}}</a>
@@ -28,7 +28,7 @@
   </div>
   <div class="weui_tab shop_tab">
     <div class="weui_navbar">
-      <div :class="{ 'tab_selected': selectedTab === '分类' }" :class="[showCategory ? 'category_active' : '']" class="weui_navbar_item" @click="showCategoryList">
+      <div :class="[showCategory ? 'category_active' : '']" class="weui_navbar_item" @click="showCategoryList">
         {{selectedCategoryName}} <i class="fa" :class="[showCategory ? 'fa-long-arrow-down' : 'fa-long-arrow-up']"></i>
       </div>
       <a class="weui_navbar_item" v-link="'/rooms/' + shop.id">
@@ -54,7 +54,7 @@
     <div class="category_list_box_item"></div>
   </div>
 
-  <product-list :title="currentCategory.name" :products="products" :selected-products="selectedProducts"></product-list>
+  <product-list :title="selectedCategoryName" :products="products" :selected-products="selectedProducts"></product-list>
   <shopping-cart-list :show.sync="showCart" :selected-products="selectedProducts"></shopping-cart-list>
   <shopping-cart>
     <span slot="money" style="color: #56abe4;">￥ {{totalPrice}}</span>
@@ -67,7 +67,6 @@
   export default {
     data () {
       return {
-        selectedTab: '中餐菜色',
         shop: {},
         isFavorited: false,
         currentCategory: {},
@@ -75,8 +74,7 @@
         selectedProducts: [],
         showCart: false,
         showCategory: false,
-        selectedCategoryName: '分类',
-        showComments: false
+        selectedCategoryName: '分类'
       }
     },
     route: {
@@ -86,7 +84,7 @@
         var params = this.$route.params
         this.$http.get('http://jiancan.me/api/u1/shops/one.json', { shop_id: params.shop_id }).then(function (response) {
           this.$set('shop', response.data)
-          this.$set('products', response.data.recommend_products)
+          this.$set('products', response.data.products)
           this.$set('currentCategory', this.shop.categories[0] ? this.shop.categories[0] : {})
           this.$dispatch('hide-loading')
         }, function (response) {
@@ -156,6 +154,8 @@
         })
       },
       getRecommendProducts () {
+        this.selectedCategoryName = '店家推荐'
+        this.showCategory = false
         this.$set('products', this.shop.recommend_products)
       },
       checkSelected (product) {
