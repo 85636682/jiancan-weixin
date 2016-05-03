@@ -54,20 +54,22 @@
     },
     route: {
       data () {
+        this.$dispatch('show-loading')
         let access_token = localStorage.getItem('jc_user_access_token')
-        if (access_token != null) {
+        if (access_token !== null) {
           this.$http.get('http://jiancan.me/api/u1/receiving_addresses.json', { access_token: access_token }).then(function (response) {
             this.$set('addresses', response.data)
           }, function (response) {
             this.$dispatch('response-msg', response)
           })
         }
+        this.$dispatch('hide-loading')
       }
     },
     methods: {
       createAddress () {
         let access_token = localStorage.getItem('jc_user_access_token')
-        if (access_token != null) {
+        if (access_token !== null) {
           var formData = new FormData()
           formData.append('access_token', localStorage.jc_user_access_token)
           formData.append('address[consignee]', this.newAddress.consignee)
@@ -84,7 +86,7 @@
       },
       setDefaultAddress (address) {
         let access_token = localStorage.getItem('jc_user_access_token')
-        if (access_token != null) {
+        if (access_token !== null) {
           this.$http.put('http://jiancan.me/api/u1/receiving_addresses/default.json', { access_token: access_token, address_id: address.id }).then(function (response) {
             if (response.data.result_code === 'SUCCESS') {
               this.addresses.push(response.data)

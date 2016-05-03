@@ -1,3 +1,8 @@
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+}
+
 .page, body {
     background-color: #fbf9fe;
 }

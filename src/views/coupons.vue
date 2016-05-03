@@ -1,5 +1,5 @@
 <template>
-  <x-header>有优惠</x-header>
+  <x-header :left-options="leftOptions">有优惠</x-header>
   <div class="weui_tab shop_tab">
     <div class="weui_navbar">
       <div class="weui_navbar_item">
@@ -42,17 +42,24 @@
   export default {
     data () {
       return {
+        leftOptions: {
+          showBack: false,
+          backText: 'Back',
+          preventGoBack: true
+        },
         currentCategory: '今日特价',
         coupons: []
       }
     },
     route: {
       data (transition) {
+        this.$dispatch('show-loading')
         this.$http.get('http://jiancan.me/api/u1/coupons.json').then(function (response) {
           this.$set('coupons', response.data)
         }, function (response) {
           this.$dispatch('response-msg', response)
         })
+        this.$dispatch('hide-loading')
       }
     },
     components: {

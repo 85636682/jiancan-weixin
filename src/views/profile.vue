@@ -1,5 +1,5 @@
 <template>
-  <x-header>我的</x-header>
+  <x-header :left-options="leftOptions">我的</x-header>
   <div class="profile_header">
     <div v-if="user.id" class="shop_card" style="padding-bottom:10px;width: 100%;height: 100px;display:-webkit-box;display:-moz-box;">
       <div class="image" style="margin-left:10px;width:100px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;">
@@ -89,12 +89,12 @@
   </div>
   <div class="weui_cells_title"></div>
   <div class="weui_cells weui_cells_access">
-    <a class="weui_cell" href="javascript:;">
+    <a class="weui_cell" href="javascript:;" v-link="{ name: 'mycoupons' }">
       <div class="weui_cell_hd">
         <i class="fa fa-gift icon-lluckybag" style="margin-right:10px;"></i>
       </div>
       <div class="weui_cell_bd weui_cell_primary">
-        <p>积分商城</p>
+        <p>优惠券</p>
       </div>
       <div class="weui_cell_ft"></div>
     </a>
@@ -137,13 +137,18 @@
   export default {
     data () {
       return {
+        leftOptions: {
+          showBack: false,
+          backText: 'Back',
+          preventGoBack: true
+        },
         user: {}
       }
     },
     route: {
       data (transition) {
         let access_token = localStorage.getItem('jc_user_access_token')
-        if (access_token != null) {
+        if (access_token !== null) {
           this.$dispatch('show-loading')
           this.$http.get('http://jiancan.me/api/u1/users/current.json', { access_token: access_token }).then(function (response) {
             this.$set('user', response.data)

@@ -29,7 +29,7 @@
   <div class="weui_tab shop_tab">
     <div class="weui_navbar">
       <div :class="[showCategory ? 'category_active' : '']" class="weui_navbar_item" @click="showCategoryList">
-        {{selectedCategoryName}} <i class="fa" :class="[showCategory ? 'fa-long-arrow-down' : 'fa-long-arrow-up']"></i>
+        {{selectedCategoryName}} <i class="fa" :class="[showCategory ? 'fa-angle-down' : 'fa-angle-up']"></i>
       </div>
       <a class="weui_navbar_item" v-link="'/rooms/' + shop.id">
         订台
@@ -91,7 +91,7 @@
           this.$dispatch('response-msg', response)
         })
         let access_token = localStorage.getItem('jc_user_access_token')
-        if (access_token != null) {
+        if (access_token !== null) {
           this.$http.get('http://jiancan.me/api/u1/favorites/favorited.json', { shop_id: params.shop_id, access_token: access_token }).then(function (response) {
             this.$set('isFavorited', response.data.isFavorited)
           }, function (response) {
@@ -197,7 +197,7 @@
       },
       favorite () {
         let access_token = localStorage.getItem('jc_user_access_token')
-        if (access_token != null) {
+        if (access_token !== null) {
           this.$http.post('http://jiancan.me/api/u1/favorites/shops.json', { shop_id: this.shop.id, access_token: access_token }).then(function (response) {
             this.$set('isFavorited', response.data.isFavorited)
           }, function (response) {

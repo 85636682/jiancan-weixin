@@ -95,8 +95,8 @@
       </div>
     </div>
 
-    <div class="weui_cells_title" v-if="order.takeout">支付</div>
-    <div class="weui_cells weui_cells_access" v-if="order.takeout">
+    <div class="weui_cells_title" v-if="canPay">支付</div>
+    <div class="weui_cells weui_cells_access" v-if="canPay">
       <a class="weui_cell" href="javascript:;" @click="weiXinPay">
         <div class="weui_cell_hd">
           <img src="../assets/iconfont-weixinzhifu.png" alt="" style="width:20px;margin-right:5px;display:block">
@@ -138,22 +138,27 @@
       data (transition) {
         this.$dispatch('show-loading')
         let access_token = localStorage.getItem('jc_user_access_token')
-        if (access_token != null) {
+        if (access_token !== null) {
           this.$http.get('http://jiancan.me/api/u1/orders/one.json', { order_id: this.$route.params.order_id, access_token: access_token }).then(function (response) {
             this.$set('order', response.data)
-            this.$dispatch('hide-loading')
+            console.log(this.order)
           }, function (response) {
-            this.$dispatch('hide-loading')
             this.$dispatch('response-msg', response)
           })
         }
+        this.$dispatch('hide-loading')
+      }
+    },
+    computed: {
+      canPay () {
+        return this.order.takeout && this.order.pay_method === 'online'
       }
     },
     methods: {
       weiXinPay () {
         let access_token = localStorage.getItem('jc_user_access_token')
         let self = this
-        if (access_token != null) {
+        if (access_token !== null) {
           this.$http.get('http://jiancan.me/api/u1/pay.json', { order_id: this.$route.params.order_id, access_token: access_token }).then(function (response) {
             if (response.data.result_code !== undefined && response.data.result_code === 'FAIL') {
               window.alert(response.data.err_code_des)

@@ -34,7 +34,7 @@
     methods: {
       updateMobile () {
         let access_token = localStorage.getItem('jc_user_access_token')
-        if (access_token != null) {
+        if (access_token !== null) {
           this.$http.put('http://jiancan.me/api/u1/users/current.json', { access_token: access_token, user: { mobile: this.mobile } }).then(function (response) {
             this.$dispatch('show-tip', response)
           }, function (response) {

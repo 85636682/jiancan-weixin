@@ -74,7 +74,7 @@
           return
         }
         let access_token = localStorage.getItem('jc_user_access_token')
-        if (access_token != null) {
+        if (access_token !== null) {
           var formData = new FormData()
           formData.append('access_token', localStorage.jc_user_access_token)
           formData.append('booking[booking_time]', this.booking_time)

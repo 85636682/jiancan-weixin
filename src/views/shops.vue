@@ -1,9 +1,9 @@
 <template>
-  <x-header>店铺列表</x-header>
+  <x-header :left-options="leftOptions">店铺列表</x-header>
   <div class="weui_tab shop_tab">
     <div class="weui_navbar">
       <div class="weui_navbar_item" @click="showCategoryList">
-        {{selectedCategoryName}} <i class="fa" :class="[showCategory ? 'fa-long-arrow-down' : 'fa-long-arrow-up']"></i>
+        {{selectedCategoryName}} <i class="fa" :class="[showCategory ? 'fa-angle-down' : 'fa-angle-up']"></i>
       </div>
       <div class="weui_navbar_item" :class="{ 'tab_selected': selectedTab === '评论' }" @click="selectedTab='评论'">
         排序
@@ -65,6 +65,11 @@
   export default {
     data () {
       return {
+        leftOptions: {
+          showBack: false,
+          backText: 'Back',
+          preventGoBack: true
+        },
         shops: [],
         showCategory: false,
         selectedCategoryName: '所有分类'
@@ -75,10 +80,10 @@
         this.$dispatch('show-loading')
         this.$http.get('http://jiancan.me/api/u1/shops.json', { }).then(function (response) {
           this.$set('shops', response.data)
-          this.$dispatch('hide-loading')
         }, function (response) {
           this.$dispatch('response-msg', response)
         })
+        this.$dispatch('hide-loading')
       }
     },
     methods: {

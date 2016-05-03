@@ -104,7 +104,7 @@
         this.express = this.$route.query.express
         this.loadSelected()
         let access_token = localStorage.getItem('jc_user_access_token')
-        if (access_token != null) {
+        if (access_token !== null) {
           this.logged = true
           this.confirmLog = false
           this.$http.get('http://jiancan.me/api/u1/users/current.json', { access_token: access_token }).then(function (response) {

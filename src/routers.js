@@ -48,6 +48,12 @@ export default function (router) {
         require(['./views/user/comments.vue'], resolve)
       }
     },
+    '/user/coupons': {
+      name: 'mycoupons',
+      component: function (resolve) {
+        require(['./views/user/coupons.vue'], resolve)
+      }
+    },
     '/user/commenton/:order_product_id': {
       name: 'commenton',
       component: function (resolve) {

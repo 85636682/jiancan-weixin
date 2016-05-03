@@ -1,5 +1,5 @@
 <template>
-  <x-header>{{coupon.title}}</x-header>
+  <x-header :left-options="leftOptions">{{coupon.title}}</x-header>
   <div class="bd">
     <div class="hd-bg" v-show="closeEnter">
       <a href="http://wx.xj8.net/guide/index">
@@ -23,9 +23,12 @@
           <input v-model="mobile" type="tel" class="jc-input-block" maxlength="11" minlength="11" placeholder="请输入手机号马上领取" />
         </div>
       </flexbox-item>
-      <flexbox-item>
-        <a @click="receiveCoupon" :class="{ 'disabled': receive }" class="button button-block button-rounded button-caution" href="javascript:;" style="margin: 10px;">
-          {{ receive ? '你已领取' : '立即领取' }}
+      <flexbox-item >
+        <a @click="receiveCoupon" v-if="!receive" class="button button-block button-rounded button-caution" href="javascript:;" style="margin: 10px;">
+          立即领取
+        </a>
+        <a @click="myCoupons" v-if="receive" class="button button-block button-rounded button-caution" href="javascript:;" style="margin: 10px;">
+          你已领取，点击查看
         </a>
       </flexbox-item>
     </flexbox>
@@ -66,7 +69,7 @@
 
     <div class="am-u-sm-12">
       <center>
-        <img v-for="image in coupon.images" src="{{ image.img520xAuto }}" class="jc-img-responsive am-img-thumbnail am-radius jc-margin-bottom-xs" style="display: block;">
+        <img v-for="image in coupon.images" :src="image.img520xAuto" class="jc-img-responsive am-img-thumbnail am-radius jc-margin-bottom-xs" style="display: block;">
       </center>
     </div>
 
@@ -99,6 +102,11 @@
   export default {
     data () {
       return {
+        leftOptions: {
+          showBack: true,
+          backText: 'Back',
+          preventGoBack: true
+        },
         closeEnter: true,
         logined: false,
         receive: false,
@@ -120,7 +128,7 @@
         })
 
         let access_token = localStorage.getItem('jc_user_access_token')
-        if (access_token != null) {
+        if (access_token !== null) {
           this.$http.get('http://jiancan.me/api/u1/users/current.json', { access_token: access_token }).then(function (response) {
             this.$set('user', response.data)
             this.logined = true
@@ -147,7 +155,7 @@
       receiveCoupon () {
         this.$dispatch('show-loading')
         let access_token = localStorage.getItem('jc_user_access_token')
-        if (access_token != null) {
+        if (access_token !== null) {
           this.$http.post('http://jiancan.me/api/u1/coupon_users.json', { access_token: access_token, coupon_id: this.$route.params.coupon_id }).then(function (response) {
             this.receive = true
             this.$dispatch('show-tip')
@@ -164,8 +172,16 @@
         }
         this.$dispatch('hide-loading')
       },
+      myCoupons () {
+        this.$route.router.go({ name: 'mycoupons' })
+      },
       login () {
         window.location.href = 'http://jiancan.me/weixin/authorize?request_url=' + this.$route.name + '&coupon_id=' + this.$route.params.coupon_id
+      }
+    },
+    events: {
+      'on-click-back' () {
+        this.$route.router.go({ name: 'coupons' })
       }
     },
     components: {

@@ -51,7 +51,7 @@
     route: {
       data (transition) {
         let access_token = localStorage.getItem('jc_user_access_token')
-        if (access_token != null) {
+        if (access_token !== null) {
           this.$http.get('http://jiancan.me/api/u1/order_products/one.json', { order_product_id: this.$route.params.order_product_id, access_token: access_token }).then(function (response) {
             this.$set('order_product', response.data)
           }, function (response) {
@@ -64,7 +64,7 @@
       commentOn () {
         this.$dispatch('show-loading')
         let access_token = localStorage.getItem('jc_user_access_token')
-        if (access_token != null) {
+        if (access_token !== null) {
           var formData = new FormData()
           formData.append('access_token', localStorage.jc_user_access_token)
           formData.append('comment[content]', this.comment.content)

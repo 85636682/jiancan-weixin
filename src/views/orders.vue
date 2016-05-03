@@ -1,5 +1,5 @@
 <template>
-  <x-header>订单列表</x-header>
+  <x-header :left-options="leftOptions">订单列表</x-header>
   <div class="weui_tab shop_tab">
     <div class="weui_navbar">
       <div class="weui_navbar_item">
@@ -51,6 +51,11 @@
   export default {
     data () {
       return {
+        leftOptions: {
+          showBack: false,
+          backText: 'Back',
+          preventGoBack: true
+        },
         orders: {},
         isLogged: false
       }
@@ -59,7 +64,7 @@
       data (transition) {
         this.$dispatch('show-loading')
         let access_token = localStorage.getItem('jc_user_access_token')
-        if (access_token != null) {
+        if (access_token !== null) {
           this.isLogged = true
           this.$http.get('http://jiancan.me/api/u1/orders.json', { access_token: access_token }).then(function (response) {
             this.$set('orders', response.data)
