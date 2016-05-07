@@ -1,5 +1,5 @@
 <template>
-  <x-header>
+  <x-header :left-options="leftOptions">
     {{shop.name}}
     <div slot="right">
       <i class="fa fa-heart-o" v-bind:class="[isFavorited ? 'fa-heart' : 'fa-heart-o']" @click="favorite"></i>
@@ -67,6 +67,11 @@
   export default {
     data () {
       return {
+        leftOptions: {
+          showBack: true,
+          backText: 'Back',
+          preventGoBack: true
+        },
         shop: {},
         isFavorited: false,
         currentCategory: {},
@@ -220,6 +225,9 @@
         if (this.selectedProducts.length > 0) {
           this.$route.router.go({name: 'check', query: { shop_id: this.shop.id, express: this.shop.full_free_courier }})
         }
+      },
+      'on-click-back' () {
+        this.$route.router.go({ name: 'shops' })
       }
     },
     components: {

@@ -141,7 +141,6 @@
         if (access_token !== null) {
           this.$http.get('http://jiancan.me/api/u1/orders/one.json', { order_id: this.$route.params.order_id, access_token: access_token }).then(function (response) {
             this.$set('order', response.data)
-            console.log(this.order)
           }, function (response) {
             this.$dispatch('response-msg', response)
           })

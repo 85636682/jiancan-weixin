@@ -65,54 +65,5 @@
   }
 </script>
 <style lang="scss">
-.item-pick {
-  width: 32px;
-  height: 32px;
-  position: absolute;
-  right: 15px; top: 50%;
-  -moz-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  -webkit-transform: translateY(-50%);
-  transform: translateY(-50%);
-  border-radius: 40px;
-  border: 1px solid #b9b9b9;
-  box-sizing: border-box;
-  -moz-transition: width 400ms;
-  -o-transition: width 400ms;
-  -webkit-transition: width 400ms;
-  transition: width 400ms;
-  text-align: center;
-  line-height: 32px;
-}
-.item-pick .item-num { display: none; }
-.item-pick .item-num {
-  font-size: 15px;
-  color: #df6448;
-  opacity: 0;
-  -moz-transition: opacity 600ms;
-  -o-transition: opacity 600ms;
-  -webkit-transition: opacity 600ms;
-  transition: opacity 600ms;
-}
-.item-pick .acenter {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-}
-.item-pick .item-minus { display: none; }
-.item-pick.picked { width: 103px; }
-.item-pick.picked .item-num { display: inherit; opacity: 1; }
-.item-pick.picked .item-minus { display: inherit; }
 
-.item-pick .item-plus, .item-pick .item-minus { width: 32px; height: 32px; position: absolute; top: 0px; }
-.item-pick .item-plus { right: -1px; }
-.item-pick .item-minus { left: -1px; }
-.item-pick .item-fake-plus, .item-pick .item-fake-minus { width: 180%; height: 200%; color: #b9b9b9; display: block; position: absolute; top: -50%; right: -40%; line-height: 64px; text-align: center; }
-.item-pick .item-fake-plus:active, .item-pick .item-fake-minus:active { color: #df6448; }
 </style>

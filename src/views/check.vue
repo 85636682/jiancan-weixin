@@ -184,14 +184,17 @@
     events: {
       ordering () {
         this.errorMsg = ''
+        if (this.order.mobile === '') {
+          this.errorMsg += '（1）送餐电话还未填写！'
+        }
         if (this.order.address === '') {
-          this.errorMsg += '（1）地址还未填写！'
+          this.errorMsg += '（2）地址还未填写！'
         }
         if (this.order.mealTime === '') {
-          this.errorMsg += '（2）就餐时间未填写！'
+          this.errorMsg += '（3）就餐时间未填写！'
         }
         if (this.selectedProducts.length <= 0) {
-          this.errorMsg += '（3）未选择任何商品！'
+          this.errorMsg += '（4）未选择任何商品！'
         }
         if (this.errorMsg !== '') {
           this.$dispatch('show-alert', { 'title': '请检查', 'msgs': this.errorMsg })

@@ -7,26 +7,30 @@
   </x-header>
   <div class="product_header">
     <img :src="product.avatar" />
-    <div class="product_card">
-      <div class="content">
-        <a class="header">{{product.name}}</a>
-        <div class="meta">
+    <div class="weui_panel">
+      <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_text">
+          <h4 class="weui_media_title">{{product.name}}</h4>
+          <p class="weui_media_desc">
+            <rater :value.sync="data42" slot="value" active-color="#04BE02" :font-size=15 disabled></rater>
+          </p>
+          <ul class="weui_media_info">
+              <li class="weui_media_info_meta">销售{{product.orders_by_month_count}}份</li>
+              <!--<li class="weui_media_info_meta">时间</li>
+              <li class="weui_media_info_meta weui_media_info_meta_extra">其它信息</li>-->
+          </ul>
         </div>
-        <div class="description">
-          <p></p>
+        <div class="weui_media_extra">
+          <div class="item-pick" :class="{ 'picked': checkSelected(product) }">
+            <div class="item-num acenter">{{checkSelected(product)}}</div>
+            <div class="item-plus">
+              <a class="item-fake-plus fa fa-plus" href="javascript:;" @click="addProduct(product)"></a>
+            </div>
+            <div class="item-minus">
+              <a class="item-fake-minus fa fa-minus" href="javascript:;" @click="removeProduct(product)"></a>
+            </div>
+          </div>
         </div>
-        <div class="extra">
-          <rater :value.sync="data42" slot="value" active-color="#04BE02" :font-size=15 disabled></rater>
-        </div>
-      </div>
-      <div class="buy">
-        <button class="button button-action button-circle button-tiny" @click="removeProduct(product)">
-          <i class="fa fa-minus"></i>
-        </button>
-        <span v-show="checkSelected(product)">{{checkSelected(product)}}</span>
-        <button class="button button-action button-circle button-tiny add-product" @click="addProduct(product)">
-          <i class="fa fa-plus"></i>
-        </button>
       </div>
     </div>
   </div>

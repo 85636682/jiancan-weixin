@@ -109,7 +109,7 @@ i.icon-profile-coins, i.icon-service-phone {
 }
 .category_list_bd.arrow_box {
 	position: relative;
-	background: #88b7d5;
+	background: #FFF;
 	border: 4px solid #c2e1f5;
 }
 .category_list_bd.arrow_box:after, .category_list_bd.arrow_box:before {
@@ -142,10 +142,77 @@ i.icon-profile-coins, i.icon-service-phone {
 .category_list_bd li {
   height: 40px;
   line-height: 40px;
-  padding-left: 20px;
-  border-bottom: solid 1px #ddd;
+  padding-left: 10px;
+  border-bottom: solid 1px #eee;
 }
 .category_active {
+  color: red;
+}
+
+
+.sort_list_box {
+  position: absolute;
+  z-index: 1000;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+}
+.sort_list_box .sort_list_box_item {
+  position: relative;
+  display: block;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+.sort_list_bd {
+  box-sizing: border-box;
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  background-color:#FFF;
+}
+.sort_list_bd.arrow_box {
+	position: relative;
+	background: #FFF;
+	border: 4px solid #c2e1f5;
+}
+.sort_list_bd.arrow_box:after, .sort_list_bd.arrow_box:before {
+	bottom: 100%;
+	left: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.sort_list_bd.arrow_box:after {
+	border-color: rgba(136, 183, 213, 0);
+	border-bottom-color: #88b7d5;
+	border-width: 30px;
+	margin-left: -30px;
+}
+.sort_list_bd.arrow_box:before {
+	border-color: rgba(194, 225, 245, 0);
+	border-bottom-color: #c2e1f5;
+	border-width: 36px;
+	margin-left: -36px;
+}
+.sort_list_bd ul {
+  width: 100%;
+}
+
+.sort_list_bd li {
+  height: 40px;
+  line-height: 40px;
+  padding-left: 10px;
+  border-bottom: solid 1px #eee;
+}
+.sort_active {
   color: red;
 }
 
@@ -185,32 +252,6 @@ i.icon-profile-coins, i.icon-service-phone {
   height: 300px;
 }
 
-.product_header .product_card {
-  background-color: #FFF;
-  width: 100%;
-  height: 80px;
-  display: -webkit-box;
-  display: -moz-box;
-}
-
-.product_header .product_card .content {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  margin: 0 5px;
-  padding: 10px 10px;
-  width: 70%;
-}
-
-.product_header .product_card .buy {
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -webkit-box-ordinal-group: 2;
-  -moz-box-ordinal-group: 2;
-  margin:0 5px;
-  line-height: 80px;
-  text-align: right;
-}
-
 .signin_line {
   height: 1px;
   border-top: 1px solid #ddd;
@@ -237,3 +278,55 @@ i.icon-profile-coins, i.icon-service-phone {
 .jc-margin-bottom-xs {
   margin-bottom: 0.5rem;
 }
+
+.item-pick {
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  right: 15px; top: 50%;
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  border-radius: 40px;
+  border: 1px solid #b9b9b9;
+  box-sizing: border-box;
+  -moz-transition: width 400ms;
+  -o-transition: width 400ms;
+  -webkit-transition: width 400ms;
+  transition: width 400ms;
+  text-align: center;
+  line-height: 32px;
+}
+
+.item-pick .item-num { display: none; }
+.item-pick .item-num {
+  font-size: 15px;
+  color: #df6448;
+  opacity: 0;
+  -moz-transition: opacity 600ms;
+  -o-transition: opacity 600ms;
+  -webkit-transition: opacity 600ms;
+  transition: opacity 600ms;
+}
+.item-pick .acenter {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+.item-pick .item-minus { display: none; }
+.item-pick.picked { width: 103px; }
+.item-pick.picked .item-num { display: inherit; opacity: 1; }
+.item-pick.picked .item-minus { display: inherit; }
+
+.item-pick .item-plus, .item-pick .item-minus { width: 32px; height: 32px; position: absolute; top: 0px; }
+.item-pick .item-plus { right: -1px; }
+.item-pick .item-minus { left: -1px; }
+.item-pick .item-fake-plus, .item-pick .item-fake-minus { width: 180%; height: 200%; color: #b9b9b9; display: block; position: absolute; top: -50%; right: -40%; line-height: 64px; text-align: center; }
+.item-pick .item-fake-plus:active, .item-pick .item-fake-minus:active { color: #df6448; }
