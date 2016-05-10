@@ -150,20 +150,19 @@
     },
     route: {
       data (transition) {
+        this.$dispatch('show-loading')
         let access_token = localStorage.getItem('jc_user_access_token')
         if (access_token !== null) {
-          this.$dispatch('show-loading')
           this.$http.get('http://jiancan.me/api/u1/users/current.json', { access_token: access_token }).then(function (response) {
             this.$set('user', response.data)
             this.$set('isLoged', true)
-            this.$dispatch('hide-loading')
           }, function (response) {
-            this.$dispatch('hide-loading')
             this.$dispatch('response-msg', response)
           })
         } else {
           this.$dispatch('response-msg', { 'status': 1000, 'statusText': '授权登录', 'data': { 'error': '请先授权登录才能使用如下功能！' } })
         }
+        this.$dispatch('hide-loading')
       }
     },
     methods: {

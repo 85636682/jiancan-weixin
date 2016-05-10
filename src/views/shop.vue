@@ -91,7 +91,6 @@
           this.$set('shop', response.data)
           this.$set('products', response.data.products)
           this.$set('currentCategory', this.shop.categories[0] ? this.shop.categories[0] : {})
-          this.$dispatch('hide-loading')
         }, function (response) {
           this.$dispatch('response-msg', response)
         })
@@ -103,6 +102,7 @@
             this.$dispatch('response-msg', response)
           })
         }
+        this.$dispatch('hide-loading')
       }
     },
     computed: {

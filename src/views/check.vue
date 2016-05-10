@@ -2,7 +2,7 @@
   <x-header>
     订台单
     <div slot="right">
-      <a @click="login" v-show="!logged" class="weui_btn weui_btn_mini weui_btn_warn" style="margin-top:-4px;">登录</a>
+      <a @click="login" v-show="!isLogged" class="weui_btn weui_btn_mini weui_btn_warn" style="margin-top:-4px;">登录</a>
     </div>
   </x-header>
   <group title="支付方式">
@@ -51,7 +51,7 @@
     </cell>
   </group>
   <div class="" style="width: 100%;height:50px;"></div>
-  <check-bar :logged="logged">
+  <check-bar :logged="isLogged">
     <span slot="money">总计 ￥ {{collect}}</span>
   </check-bar>
   <div class="weui_dialog_confirm" v-show="confirmLog">
@@ -93,7 +93,7 @@
           receiving_addresses: []
         },
         showAddressesSheet: false,
-        logged: false,
+        isLogged: false,
         confirmLog: true,
         errorMsg: ''
       }
@@ -105,7 +105,7 @@
         this.loadSelected()
         let access_token = localStorage.getItem('jc_user_access_token')
         if (access_token !== null) {
-          this.logged = true
+          this.isLogged = true
           this.confirmLog = false
           this.$http.get('http://jiancan.me/api/u1/users/current.json', { access_token: access_token }).then(function (response) {
             this.$set('user', response.data)
@@ -168,7 +168,7 @@
         return JSON.stringify(formProducts)
       },
       dontWantLog () {
-        this.confirmLog = false
+        this.$route.router.go({ path: '/shops/' + this.shopId })
       },
       login () {
         window.location.href = 'http://jiancan.me/weixin/authorize?request_url=' + this.$route.name + '&shop_id=' + this.$route.query.shop_id

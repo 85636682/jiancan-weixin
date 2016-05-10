@@ -73,10 +73,10 @@ export default {
       this.$http.get('http://jiancan.me/api/u1/products/one.json', { product_id: this.$route.params.product_id }).then(function (response) {
         this.$set('product', response.data)
         this.loadSelected()
-        this.$dispatch('hide-loading')
       }, function (response) {
         this.$dispatch('response-msg', response)
       })
+      this.$dispatch('hide-loading')
     }
   },
   computed: {

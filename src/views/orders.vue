@@ -68,11 +68,11 @@
           this.isLogged = true
           this.$http.get('http://jiancan.me/api/u1/orders.json', { access_token: access_token }).then(function (response) {
             this.$set('orders', response.data)
-            this.$dispatch('hide-loading')
           }, function (response) {
             this.$dispatch('response-msg', response)
           })
         }
+        this.$dispatch('hide-loading')
       }
     },
     methods: {

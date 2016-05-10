@@ -140,11 +140,9 @@
               this.receive = true
             }
           }, function (response) {
-            this.$dispatch('hide-loading')
             this.$dispatch('response-msg', response)
           })
         }
-
         this.$dispatch('hide-loading')
       }
     },

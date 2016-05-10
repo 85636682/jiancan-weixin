@@ -91,14 +91,15 @@
         <div class="weui_media_bd">
           <h4 class="weui_media_title">{{shop.name}}</h4>
           <p class="weui_media_desc" style="font-size:15px;">
-            <span class="" v-for="meal in shop.meals">
+            <span style="font-size:13px;margin-right:5px;" v-for="meal in shop.meals">
+              <img v-bind:src="'../static/images/'+meal+'.png'" width="15" style="vertical-align:text-bottom" />
               {{ translateMeal(meal) }}
             </span>
           </p>
           <p class="weui_media_desc">
             <rater :value.sync="data42" slot="value" active-color="#04BE02" :font-size=15 disabled></rater>
           </p>
-          <p class="weui_media_desc">
+          <p class="weui_media_desc" style="padding-top:5px;">
             月售{{shop.orders_by_month_count}}单
           </p>
         </div>

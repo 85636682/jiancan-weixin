@@ -29,7 +29,7 @@
           this.error.msg = '你还未授权登录或者验证过期！'
           this.error.status = response.status
           this.error.statusText = response.statusText
-          localStorage.setItem('jc_user_access_token', '')
+          localStorage.removeItem('jc_user_access_token')
         } else if (response.status === 0) {
           this.showAlert = true
           this.error.title = '网络错误'
