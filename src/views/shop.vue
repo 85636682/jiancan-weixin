@@ -43,6 +43,7 @@
 
   <div class="category_list_box">
     <div class="category_list_box_item">
+      <div class="category_list_bd arrow" v-show="showCategory"></div>
       <div class="category_list_bd arrow_box" v-show="showCategory">
         <ul>
           <li @click="getRecommendProducts">店家推荐</li>
@@ -161,7 +162,7 @@
       getRecommendProducts () {
         this.selectedCategoryName = '店家推荐'
         this.showCategory = false
-        this.$set('products', this.shop.recommend_products)
+        this.$set('products', this.shop.products)
       },
       checkSelected (product) {
         for (var i = 0; i < this.selectedProducts.length; i++) {

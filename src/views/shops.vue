@@ -17,6 +17,7 @@
 
   <div class="category_list_box">
     <div class="category_list_box_item">
+      <div class="category_list_bd arrow" v-show="showCategory"></div>
       <div class="category_list_bd arrow_box" v-show="showCategory">
         <ul>
           <li @click="selectedCategory('all')">
@@ -53,6 +54,7 @@
   <div class="sort_list_box">
     <div class="sort_list_box_item"></div>
     <div class="sort_list_box_item">
+      <div class="sort_list_bd arrow" v-show="showSort"></div>
       <div class="sort_list_bd arrow_box" v-show="showSort">
         <ul>
           <li @click="selectedSort('intelligent')">

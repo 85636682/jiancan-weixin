@@ -105,7 +105,15 @@ i.icon-profile-coins, i.icon-service-phone {
   height: 100%;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
-  background-color:#FFF;
+  background-color: transparent;
+}
+.category_list_bd.arrow {
+  width: 0;
+  height: 0;
+	border-left: 7px solid transparent;
+	border-right: 7px solid transparent;
+	border-bottom: 9px solid #c2e1f5;
+  margin-left: 15px;
 }
 .category_list_bd.arrow_box {
 	position: relative;
@@ -172,7 +180,15 @@ i.icon-profile-coins, i.icon-service-phone {
   height: 100%;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
-  background-color:#FFF;
+  background-color: transparent;
+}
+.sort_list_bd.arrow {
+  width: 0;
+  height: 0;
+	border-left: 7px solid transparent;
+	border-right: 7px solid transparent;
+	border-bottom: 9px solid #c2e1f5;
+  margin-left: 15px;
 }
 .sort_list_bd.arrow_box {
 	position: relative;
