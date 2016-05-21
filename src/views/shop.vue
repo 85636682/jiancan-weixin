@@ -64,8 +64,17 @@
 <script>
   import Rater from 'vux/components/rater'
   import XHeader from 'vux/components/x-header'
+  import { showAlert, showLoading, hideLoading, showHandleTip } from '../vuex/actions'
 
   export default {
+    vuex: {
+      actions: {
+        showAlert,
+        showLoading,
+        hideLoading,
+        showHandleTip
+      }
+    },
     data () {
       return {
         leftOptions: {
@@ -85,25 +94,24 @@
     },
     route: {
       data (transition) {
-        this.$dispatch('show-loading')
+        this.showLoading()
         this.loadSelected()
-        var params = this.$route.params
-        this.$http.get('http://jiancan.me/api/u1/shops/one.json', { shop_id: params.shop_id }).then(function (response) {
+        this.$http.get('http://jiancan.me/api/u1/shops/one.json', { shop_id: this.$route.params.shop_id }).then(function (response) {
           this.$set('shop', response.data)
           this.$set('products', response.data.products)
           this.$set('currentCategory', this.shop.categories[0] ? this.shop.categories[0] : {})
         }, function (response) {
-          this.$dispatch('response-msg', response)
+          this.showAlert(response.data.title, response.data.error)
         })
         let access_token = localStorage.getItem('jc_user_access_token')
         if (access_token !== null) {
-          this.$http.get('http://jiancan.me/api/u1/favorites/favorited.json', { shop_id: params.shop_id, access_token: access_token }).then(function (response) {
+          this.$http.get('http://jiancan.me/api/u1/favorites/favorited.json', { shop_id: this.$route.params.shop_id, access_token: access_token }).then(function (response) {
             this.$set('isFavorited', response.data.isFavorited)
           }, function (response) {
-            this.$dispatch('response-msg', response)
+            this.showAlert(response.data.title, response.data.error)
           })
         }
-        this.$dispatch('hide-loading')
+        this.hideLoading()
       }
     },
     computed: {
@@ -156,7 +164,7 @@
         this.$http.get('http://jiancan.me/api/u1/categories/products.json', { category_id: this.currentCategory.id }).then(function (response) {
           this.$set('products', response.data)
         }, function (response) {
-          this.$dispatch('response-msg', response)
+          this.showAlert(response.data.title, response.data.error)
         })
       },
       getRecommendProducts () {
@@ -207,7 +215,7 @@
           this.$http.post('http://jiancan.me/api/u1/favorites/shops.json', { shop_id: this.shop.id, access_token: access_token }).then(function (response) {
             this.$set('isFavorited', response.data.isFavorited)
           }, function (response) {
-            this.$dispatch('response-msg', response)
+            this.showAlert(response.data.title, response.data.error)
           })
         }
       }

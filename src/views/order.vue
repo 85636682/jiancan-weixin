@@ -1,5 +1,5 @@
 <template>
-  <x-header>我的订单</x-header>
+  <x-header :left-options="leftOptions">我的订单</x-header>
   <div class="bd">
     <div class="weui_cells_title">订单详情</div>
     <div class="weui_cells">
@@ -124,11 +124,25 @@
   </div>
 </template>
 <script>
+  import { showAlert, showLoading, hideLoading, showHandleTip } from '../vuex/actions'
   import XHeader from 'vux/components/x-header'
 
   export default {
+    vuex: {
+      actions: {
+        showAlert,
+        showLoading,
+        hideLoading,
+        showHandleTip
+      }
+    },
     data () {
       return {
+        leftOptions: {
+          showBack: true,
+          backText: 'Back',
+          preventGoBack: true
+        },
         order: {
           shop: {}
         }
@@ -136,16 +150,16 @@
     },
     route: {
       data (transition) {
-        this.$dispatch('show-loading')
+        this.showLoading()
         let access_token = localStorage.getItem('jc_user_access_token')
         if (access_token !== null) {
           this.$http.get('http://jiancan.me/api/u1/orders/one.json', { order_id: this.$route.params.order_id, access_token: access_token }).then(function (response) {
             this.$set('order', response.data)
           }, function (response) {
-            this.$dispatch('response-msg', response)
+            this.showAlert(response.data.title, response.data.error)
           })
         }
-        this.$dispatch('hide-loading')
+        this.hideLoading()
       }
     },
     computed: {
@@ -181,9 +195,14 @@
               })
             }
           }, function (response) {
-            this.$dispatch('response-msg', response)
+            this.showAlert(response.data.title, response.data.error)
           })
         }
+      }
+    },
+    events: {
+      'on-click-back' () {
+        this.$route.router.go({ name: 'orders' })
       }
     },
     components: {

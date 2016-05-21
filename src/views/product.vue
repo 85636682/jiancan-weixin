@@ -56,8 +56,17 @@
 <script>
 import Rater from 'vux/components/rater'
 import XHeader from 'vux/components/x-header'
+import { showAlert, showLoading, hideLoading, showHandleTip } from '../vuex/actions'
 
 export default {
+  vuex: {
+    actions: {
+      showAlert,
+      showLoading,
+      hideLoading,
+      showHandleTip
+    }
+  },
   data () {
     return {
       product: {
@@ -69,14 +78,14 @@ export default {
   },
   route: {
     data (transition) {
-      this.$dispatch('show-loading')
+      this.showLoading()
       this.$http.get('http://jiancan.me/api/u1/products/one.json', { product_id: this.$route.params.product_id }).then(function (response) {
         this.$set('product', response.data)
         this.loadSelected()
       }, function (response) {
-        this.$dispatch('response-msg', response)
+        this.showAlert(response.data.title, response.data.error)
       })
-      this.$dispatch('hide-loading')
+      this.hideLoading()
     }
   },
   computed: {

@@ -7,7 +7,9 @@ import validator from 'vue-validator'
 import VueI18n from 'vue-i18n'
 import Locales from './config/locales.json'
 import FastClick from 'fastclick'
+import { sync } from 'vuex-router-sync'
 import routerMap from './routers'
+import store from './vuex/store'
 import WxApi from './wx-api'
 
 Vue.config.debug = true
@@ -28,7 +30,7 @@ router.beforeEach(transition => {
     // 对用户身份进行验证...
     let access_token = localStorage.getItem('jc_user_access_token')
     if (!access_token || access_token === null) {
-      transition.go('/profile')
+      transition.redirect('/profile')
     }
   }
   FastClick.attach(document.body)
@@ -43,6 +45,8 @@ router.afterEach(function (transition) {
 let main = Vue.extend(require('./main.vue'))
 
 routerMap(router)
+
+sync(store, router)
 
 router.start(main, '#app')
 

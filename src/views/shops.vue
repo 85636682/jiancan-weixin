@@ -1,5 +1,11 @@
 <template>
-  <x-header :left-options="leftOptions">店铺列表</x-header>
+  <x-header :left-options="leftOptions">
+    店铺列表
+    <a slot="right" v-link="'/search'">
+      <img src="../assets/search.png" width="20" />
+    </a>
+  </x-header>
+
   <div class="weui_tab shop_tab">
     <div class="weui_navbar">
       <div class="weui_navbar_item" @click="showCategoryList">
@@ -86,7 +92,7 @@
   <div class="weui_panel weui_panel_access">
     <div class="weui_panel_hd">{{selectedCategoryName}} | {{selectedSortName}}</div>
     <div class="weui_panel_bd shop_list_bd">
-      <a v-for="shop in shops" v-link="'/shops/' + shop.id" class="weui_media_box weui_media_appmsg">
+      <a v-for="shop in shops" v-link="{ name: 'shop', params: { shop_id: shop.id } }" class="weui_media_box weui_media_appmsg">
         <div class="weui_media_hd">
           <img class="weui_media_appmsg_thumb" v-bind:src="shop.avatar" alt="">
         </div>
@@ -113,8 +119,17 @@
 <script>
   import XHeader from 'vux/components/x-header'
   import Rater from 'vux/components/rater'
+  import { showAlert, showLoading, hideLoading, showHandleTip } from '../vuex/actions'
 
   export default {
+    vuex: {
+      actions: {
+        showAlert,
+        showLoading,
+        hideLoading,
+        showHandleTip
+      }
+    },
     data () {
       return {
         leftOptions: {
@@ -139,7 +154,7 @@
     },
     route: {
       data (transition) {
-        this.$dispatch('show-loading')
+        this.showLoading()
         var self = this
         window.wx.getLocation({
           type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
@@ -154,41 +169,38 @@
         this.$http.get('http://jiancan.me/api/u1/shops.json', { }).then(function (response) {
           this.$set('shops', response.data)
         }, function (response) {
-          this.$dispatch('response-msg', response)
+          this.showAlert(response.data.title, response.data.error)
         })
-        this.$dispatch('hide-loading')
+        this.hideLoading()
       }
     },
     methods: {
       buildSrc (meal) {
         return '../src/assets/' + meal + '.png'
       },
-      buildLink (shopId) {
-        return '/shops/' + shopId
-      },
       selectedCategory (meal) {
-        this.$dispatch('show-loading')
+        this.showLoading()
         this.showCategory = false
         this.selectedCategoryOrign = meal
         this.selectedCategoryName = meal === 'all' ? '所有分类' : this.translateMeal(meal)
         this.$http.get('http://jiancan.me/api/u1/shops.json', { meal: meal, sort: this.selectedSortOrign }).then(function (response) {
           this.$set('shops', response.data)
         }, function (response) {
-          this.$dispatch('response-msg', response)
+          this.showAlert(response.data.title, response.data.error)
         })
-        this.$dispatch('hide-loading')
+        this.hideLoading()
       },
       selectedSort (sort) {
-        this.$dispatch('show-loading')
+        this.showLoading()
         this.showSort = false
         this.selectedSortOrigin = sort
         this.selectedSortName = this.translateSort(sort)
         this.$http.get('http://jiancan.me/api/u1/shops.json', { meal: this.selectedCategoryOrign, sort: sort }).then(function (response) {
           this.$set('shops', response.data)
         }, function (response) {
-          this.$dispatch('response-msg', response)
+          this.showAlert(response.data.title, response.data.error)
         })
-        this.$dispatch('hide-loading')
+        this.hideLoading()
       },
       translateMeal (meal) {
         var tempMeal = ''

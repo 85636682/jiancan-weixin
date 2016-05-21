@@ -17,8 +17,17 @@
 </template>
 <script>
   import XHeader from 'vux/components/x-header'
+  import { showAlert, showLoading, hideLoading, showHandleTip } from '../vuex/actions'
 
   export default {
+    vuex: {
+      actions: {
+        showAlert,
+        showLoading,
+        hideLoading,
+        showHandleTip
+      }
+    },
     data () {
       return {
         bookings: []
@@ -26,13 +35,13 @@
     },
     route: {
       data (transition) {
-        this.$dispatch('show-loading')
+        this.showLoading()
         this.$http.get('http://jiancan.me/api/u1/bookings.json', { bookingable_type: 'Room', access_token: localStorage.jc_user_access_token }).then(function (response) {
           this.$set('bookings', response.data)
         }, function (response) {
-          this.$dispatch('response-msg', response)
+          this.showAlert(response.data.title, response.data.error)
         })
-        this.$dispatch('hide-loading')
+        this.hideLoading()
       }
     },
     components: {

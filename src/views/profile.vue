@@ -1,10 +1,9 @@
 <template>
   <x-header :left-options="leftOptions">我的</x-header>
   <div class="profile_header">
-    <div v-if="user.id" class="shop_card" style="padding-bottom:10px;width: 100%;height: 100px;display:-webkit-box;display:-moz-box;">
+    <div v-if="isLoged" class="shop_card" style="padding-bottom:10px;width: 100%;height: 100px;display:-webkit-box;display:-moz-box;">
       <div class="image" style="margin-left:10px;width:100px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;">
-        <img @click="inputFileClick" v-bind:src="user.avatar" width="100px" height="100px" />
-        <input @change="uploadAvatar" v-el:avatar class="avatar" type="file" accept="image/*" style="display:none;" />
+        <img v-bind:src="user.wx_avatar" width="100px" height="100px" />
       </div>
       <div class="content" style="padding-left:25px;-webkit-box-flex:1;-moz-box-flex:1;-webkit-box-ordinal-group:2;-moz-box-ordinal-group:2;margin:0 5px;">
         <a class="header" style="color:#FFF;">{{user.nickname}}</a>
@@ -131,12 +130,32 @@
       <div class="weui_cell_ft"></div>
     </a>
   </div>
+  <flexbox v-if="isLoged">
+    <flexbox-item>
+      <a @click="logout" class="button button-block button-rounded button-caution" href="javascript:;" style="margin: 10px;">
+        退出登录
+      </a>
+    </flexbox-item>
+  </flexbox>
   <Tabbar></Tabbar>
 </template>
 <script>
   import XHeader from 'vux/components/x-header'
+  import Flexbox from 'vux/components/flexbox'
+  import FlexboxItem from 'vux/components/flexbox-item'
+  import { showAlert, showLoading, hideLoading, showHandleTip, signin, signout } from '../vuex/actions'
 
   export default {
+    vuex: {
+      actions: {
+        showAlert,
+        showLoading,
+        hideLoading,
+        showHandleTip,
+        signin,
+        signout
+      }
+    },
     data () {
       return {
         leftOptions: {
@@ -150,49 +169,35 @@
     },
     route: {
       data (transition) {
-        this.$dispatch('show-loading')
+        this.showLoading()
         let access_token = localStorage.getItem('jc_user_access_token')
         if (access_token !== null) {
           this.$http.get('http://jiancan.me/api/u1/users/current.json', { access_token: access_token }).then(function (response) {
             this.$set('user', response.data)
             this.$set('isLoged', true)
           }, function (response) {
-            this.$dispatch('response-msg', response)
+            this.showAlert(response.data.title, response.data.error)
           })
         } else {
-          this.$dispatch('response-msg', { 'status': 1000, 'statusText': '授权登录', 'data': { 'error': '请先授权登录才能使用如下功能！' } })
+          this.showAlert('授权登录', '请先授权登录才能使用如下功能！')
         }
-        this.$dispatch('hide-loading')
+        this.hideLoading()
       }
     },
     methods: {
-      inputFileClick () {
-        return this.$els.avatar.click()
-      },
-      uploadAvatar (e) {
-        e.preventDefault()
-
-        if (this.$els.avatar.value === '') return
-        var formData = new FormData()
-        formData.append('access_token', localStorage.getItem('jc_user_access_token'))
-        formData.append('user[avatar]', this.$els.avatar.files[0])
-
-        this.$http.put('http://jiancan.me/api/u1/users/current.json', formData).then(function (response) {
-          this.$set('user', response.data.user)
-        }, function (response) {
-          this.$dispatch('response-msg', response)
-        })
-      },
       login () {
         window.location.href = 'http://jiancan.me/weixin/authorize?request_url=' + this.$route.name
+      },
+      logout () {
+        this.$set('isLoged', false)
+        this.signout()
       }
     },
     components: {
       'Tabbar': require('../components/tabbar.vue'),
-      XHeader
+      XHeader,
+      Flexbox,
+      FlexboxItem
     }
   }
 </script>
-<style lang="scss">
-
-</style>

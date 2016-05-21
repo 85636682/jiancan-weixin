@@ -17,8 +17,17 @@
 </template>
 <script>
 import XHeader from 'vux/components/x-header'
+import { showAlert, showLoading, hideLoading, showHandleTip } from '../vuex/actions'
 
 export default {
+  vuex: {
+    actions: {
+      showAlert,
+      showLoading,
+      hideLoading,
+      showHandleTip
+    }
+  },
   props: ['shop_id'],
   data () {
     return {
@@ -28,15 +37,15 @@ export default {
   },
   route: {
     data (transition) {
-      this.$dispatch('show-loading')
+      this.showLoading()
       var params = this.$route.params
       this.$http.get('http://jiancan.me/api/u1/shops/one.json', { shop_id: params.shop_id }).then(function (response) {
         this.$set('shop', response.data)
         this.$set('comments', this.shop.comments)
       }, function (response) {
-        this.$dispatch('response-msg', response)
+        this.showAlert(response.data.title, response.data.error)
       })
-      this.$dispatch('hide-loading')
+      this.hideLoading()
     }
   },
   computed: {

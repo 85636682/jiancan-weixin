@@ -23,9 +23,18 @@
   </div>
 </template>
 <script>
+  import { showAlert, showLoading, hideLoading, showHandleTip } from '../../vuex/actions'
   import XHeader from 'vux/components/x-header'
 
   export default {
+    vuex: {
+      actions: {
+        showAlert,
+        showLoading,
+        hideLoading,
+        showHandleTip
+      }
+    },
     data () {
       return {
         order_products: ''
@@ -33,16 +42,16 @@
     },
     route: {
       data (transition) {
-        this.$dispatch('show-loading')
+        this.showLoading()
         let access_token = localStorage.getItem('jc_user_access_token')
         if (access_token !== null) {
           this.$http.get('http://jiancan.me/api/u1/order_products.json', { access_token: access_token }).then(function (response) {
             this.$set('order_products', response.data)
           }, function (response) {
-            this.$dispatch('response-msg', response)
+            this.showAlert(response.data.title, response.data.error)
           })
         }
-        this.$dispatch('hide-loading')
+        this.hideLoading()
       }
     },
     methods: {

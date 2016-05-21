@@ -33,10 +33,19 @@
   </div>
 </template>
 <script>
+  import { showAlert, showLoading, hideLoading, showHandleTip } from '../../vuex/actions'
   import XHeader from 'vux/components/x-header'
   import Rater from 'vux/components/rater'
 
   export default {
+    vuex: {
+      actions: {
+        showAlert,
+        showLoading,
+        hideLoading,
+        showHandleTip
+      }
+    },
     data () {
       return {
         order_product: {
@@ -55,14 +64,14 @@
           this.$http.get('http://jiancan.me/api/u1/order_products/one.json', { order_product_id: this.$route.params.order_product_id, access_token: access_token }).then(function (response) {
             this.$set('order_product', response.data)
           }, function (response) {
-            this.$dispatch('response-msg', response)
+            this.showAlert(response.data.title, response.data.error)
           })
         }
       }
     },
     methods: {
       commentOn () {
-        this.$dispatch('show-loading')
+        this.showLoading()
         let access_token = localStorage.getItem('jc_user_access_token')
         if (access_token !== null) {
           var formData = new FormData()
@@ -73,11 +82,11 @@
           formData.append('comment[commentable_id]', this.order_product.id)
 
           this.$http.post('http://jiancan.me/api/u1/comments.json', formData).then(function (response) {
-            this.$dispatch('hide-loading')
+            this.hideLoading()
             this.$route.router.go({ name: 'mycomments' })
           }, function (response) {
-            this.$dispatch('hide-loading')
-            this.$dispatch('response-msg', response)
+            this.hideLoading()
+            this.showAlert(response.data.title, response.data.error)
           })
         }
       }

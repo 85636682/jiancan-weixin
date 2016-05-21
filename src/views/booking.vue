@@ -33,8 +33,17 @@
 <script>
   import Datetime from 'vux/components/datetime/'
   import XHeader from 'vux/components/x-header'
+  import { showAlert, showLoading, hideLoading, showHandleTip } from '../vuex/actions'
 
   export default {
+    vuex: {
+      actions: {
+        showAlert,
+        showLoading,
+        hideLoading,
+        showHandleTip
+      }
+    },
     props: ['room_id'],
     data () {
       return {
@@ -52,7 +61,7 @@
         this.$http.get('http://jiancan.me/api/u1/rooms/one.json', { room_id: params.room_id }).then(function (response) {
           this.$set('room', response.data)
         }, function (response) {
-          this.$dispatch('response-msg', response)
+          this.showAlert(response.data.title, response.data.error)
         })
       }
     },
@@ -85,7 +94,7 @@
           this.$http.post('http://jiancan.me/api/u1/bookings.json', formData).then(function (response) {
             this.$route.router.go({ name: 'rooms', params: { shop_id: this.room.shop.id } })
           }, function (response) {
-            this.$dispatch('response-msg', response)
+            this.showAlert(response.data.title, response.data.error)
           })
         }
       },

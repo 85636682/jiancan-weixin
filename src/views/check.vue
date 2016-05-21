@@ -74,8 +74,17 @@
   import Group from 'vux/components/group/'
   import Radio from 'vux/components/radio/'
   import XHeader from 'vux/components/x-header'
+  import { showAlert, showLoading, hideLoading, showHandleTip } from '../vuex/actions'
 
   export default {
+    vuex: {
+      actions: {
+        showAlert,
+        showLoading,
+        hideLoading,
+        showHandleTip
+      }
+    },
     data () {
       return {
         payMethodList: [ '在线支付', '货到付款' ],
@@ -120,7 +129,7 @@
               this.order.mobile = this.user.mobile
             }
           }, function (response) {
-            this.$dispatch('response-msg', response)
+            this.showAlert(response.data.title, response.data.error)
           })
         }
       }
@@ -197,7 +206,7 @@
           this.errorMsg += '（4）未选择任何商品！'
         }
         if (this.errorMsg !== '') {
-          this.$dispatch('show-alert', { 'title': '请检查', 'msgs': this.errorMsg })
+          this.showAlert('请检查', this.errorMsg)
           return
         }
         var formData = new FormData()
@@ -214,9 +223,9 @@
         this.$http.post('http://jiancan.me/api/u1/orders.json', formData).then(function (response) {
           let order_id = response.data.id
           this.clearSelected()
-          this.$route.router.go({ path: '/order/' + order_id })
+          this.$route.router.go({ name: 'order', params: { order_id: order_id } })
         }, function (response) {
-          this.$dispatch('response-msg', response)
+          this.showAlert(response.data.title, response.data.error)
         })
       }
     },

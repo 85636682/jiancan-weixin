@@ -95,11 +95,20 @@
   </flexbox>
 </template>
 <script>
+  import { showAlert, showLoading, hideLoading, showHandleTip } from '../vuex/actions'
   import XHeader from 'vux/components/x-header'
   import Flexbox from 'vux/components/flexbox'
   import FlexboxItem from 'vux/components/flexbox-item'
 
   export default {
+    vuex: {
+      actions: {
+        showAlert,
+        showLoading,
+        hideLoading,
+        showHandleTip
+      }
+    },
     data () {
       return {
         leftOptions: {
@@ -119,12 +128,12 @@
     },
     route: {
       data (transtion) {
-        this.$dispatch('show-loading')
+        this.showLoading()
 
         this.$http.get('http://jiancan.me/api/u1/coupons/one.json', { coupon_id: this.$route.params.coupon_id }).then(function (response) {
           this.$set('coupon', response.data)
         }, function (response) {
-          this.$dispatch('response-msg', response)
+          this.showAlert(response.data.title, response.data.error)
         })
 
         let access_token = localStorage.getItem('jc_user_access_token')
@@ -133,17 +142,17 @@
             this.$set('user', response.data)
             this.logined = true
           }, function (response) {
-            this.$dispatch('response-msg', response)
+            this.showAlert(response.data.title, response.data.error)
           })
           this.$http.get('http://jiancan.me/api/u1/coupon_users/check.json', { access_token: access_token, coupon_id: this.$route.params.coupon_id }).then(function (response) {
             if (response.data.result_code === 'SUCCESS') {
               this.receive = true
             }
           }, function (response) {
-            this.$dispatch('response-msg', response)
+            this.showAlert(response.data.title, response.data.error)
           })
         }
-        this.$dispatch('hide-loading')
+        this.hideLoading()
       }
     },
     methods: {
@@ -151,24 +160,24 @@
         this.closeEnter = !this.closeEnter
       },
       receiveCoupon () {
-        this.$dispatch('show-loading')
+        this.showLoading()
         let access_token = localStorage.getItem('jc_user_access_token')
         if (access_token !== null) {
           this.$http.post('http://jiancan.me/api/u1/coupon_users.json', { access_token: access_token, coupon_id: this.$route.params.coupon_id }).then(function (response) {
             this.receive = true
-            this.$dispatch('show-tip')
+            this.showHandleTip()
           }, function (response) {
-            this.$dispatch('response-msg', response)
+            this.showAlert(response.data.title, response.data.error)
           })
           if (!this.user.mobile) {
             this.$http.put('http://jiancan.me/api/u1/users/current.json', { access_token: access_token, mobile: this.mobile }).then(function (response) {
               this.$set('user', response.data)
             }, function (response) {
-              this.$dispatch('response-msg', response)
+              this.showAlert(response.data.title, response.data.error)
             })
           }
         }
-        this.$dispatch('hide-loading')
+        this.hideLoading()
       },
       myCoupons () {
         this.$route.router.go({ name: 'mycoupons' })

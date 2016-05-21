@@ -37,9 +37,18 @@
   <Tabbar></Tabbar>
 </template>
 <script>
+  import { showAlert, showLoading, hideLoading, showHandleTip } from '../vuex/actions'
   import XHeader from 'vux/components/x-header'
 
   export default {
+    vuex: {
+      actions: {
+        showAlert,
+        showLoading,
+        hideLoading,
+        showHandleTip
+      }
+    },
     data () {
       return {
         leftOptions: {
@@ -53,13 +62,13 @@
     },
     route: {
       data (transition) {
-        this.$dispatch('show-loading')
+        this.showLoading()
         this.$http.get('http://jiancan.me/api/u1/coupons.json').then(function (response) {
           this.$set('coupons', response.data)
         }, function (response) {
-          this.$dispatch('response-msg', response)
+          this.showAlert(response.data.title, response.data.error)
         })
-        this.$dispatch('hide-loading')
+        this.hideLoading()
       }
     },
     components: {

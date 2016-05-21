@@ -23,9 +23,18 @@
 
 </template>
 <script>
+  import { showAlert, showLoading, hideLoading, showHandleTip } from '../../vuex/actions'
   import XHeader from 'vux/components/x-header'
 
   export default {
+    vuex: {
+      actions: {
+        showAlert,
+        showLoading,
+        hideLoading,
+        showHandleTip
+      }
+    },
     data () {
       return {
         mobile: ''
@@ -33,14 +42,16 @@
     },
     methods: {
       updateMobile () {
+        this.showLoading()
         let access_token = localStorage.getItem('jc_user_access_token')
         if (access_token !== null) {
           this.$http.put('http://jiancan.me/api/u1/users/current.json', { access_token: access_token, user: { mobile: this.mobile } }).then(function (response) {
-            this.$dispatch('show-tip', response)
+            this.showHandleTip()
           }, function (response) {
-            this.$dispatch('response-msg', response)
+            this.showAlert(response.data.title, response.data.error)
           })
         }
+        this.hideLoading()
       }
     },
     components: {

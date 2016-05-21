@@ -13,6 +13,12 @@ export default function (router) {
         require(['./views/shops.vue'], resolve)
       }
     },
+    '/search': {
+      name: 'search',
+      component: function (resolve) {
+        require(['./views/search.vue'], resolve)
+      }
+    },
     '/shops': {
       name: 'shops',
       component: function (resolve) {
@@ -20,6 +26,7 @@ export default function (router) {
       }
     },
     '/shops/:shop_id': {
+      name: 'shop',
       component: function (resolve) {
         require(['./views/shop.vue'], resolve)
       }
@@ -78,7 +85,7 @@ export default function (router) {
         require(['./views/orders.vue'], resolve)
       }
     },
-    '/order/:order_id': {
+    '/orders/:order_id': {
       name: 'order',
       component: function (resolve) {
         require(['./views/order.vue'], resolve)
